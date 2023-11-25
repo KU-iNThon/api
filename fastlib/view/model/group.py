@@ -26,6 +26,7 @@ class GroupPostRecruitResponseDto(BaseModel):
     id: int
 
 
+
 class GroupPostTaskRequestDto(BaseModel):
     title: str
     start_date: str
@@ -34,3 +35,46 @@ class GroupPostTaskRequestDto(BaseModel):
 
 class GroupPostTaskResponseDto(BaseModel):
     id: int
+
+      
+class GroupRecruitListItemResponseDto(BaseModel):
+    id: int
+    title: str
+    description: str
+    room_name: str
+
+
+class GroupRecruitListResponseDto(BaseModel):
+    recruits: List[GroupRecruitListItemResponseDto]
+
+
+class GroupRecruitDetailResponseDto(BaseModel):
+    title: str
+    id: int
+    room_name: str
+    admin_name: str
+    description: str
+    people: int
+    max_people: int
+
+
+class GroupNoticeCommentResponseDto(BaseModel):
+    author: str
+    text: str
+
+
+class GroupNoticeDetailResponseDto(BaseModel):
+    id: int
+    title: str
+    description: str
+    comments: List[GroupNoticeCommentResponseDto]
+
+
+class GroupTaskDetailResponseDto(BaseModel):
+    id: int
+    title: str
+    start_date: str
+    end_date: str
+    not_started: List[str]
+    comments: List[GroupNoticeCommentResponseDto]
+
