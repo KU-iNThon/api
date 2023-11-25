@@ -12,37 +12,37 @@ def engine():
     return create_engine("mysql+pymysql://root:1234@127.0.0.1:3306/ku", echo=True)
 
 
-def test_login(engine):
+@pytest.fixture()
+def session(engine):
+    return sessionmaker(bind=engine)()
+
+
+def test_login(session, engine):
     service = UserService(engine=engine)
     entity = User(nickname="test", id="invalid@com", pw="test-pw")
     with pytest.raises(HTTPException) as e:
-        res = service.login(entity)
+        res = service.login(session=session, entity=entity)
     assert e.value.status_code == 404
 
 
-def test_register_ok(engine):
+def test_register_ok(session, engine):
     service = UserService(engine=engine)
     entity = User(nickname="test1", id="new10@com", pw="test-pw")
-    res = service.register(entity)
+    res = service.register(session=session, entity=entity)
     # clean
-    with sessionmaker(bind=engine)() as session:
-        session.add_all([res, entity])
-        assert res.id == entity.id
-        session.delete(res)
-        session.delete(entity)
-        session.commit()
+    assert res.id == entity.id
+    session.delete(res)
+    session.commit()
 
 
-def test_register_duplicated(engine):
+def test_register_duplicated(session, engine):
     service = UserService(engine=engine)
     entity1 = User(nickname="test2", id="new3@com", pw="test-pw")
     entity2 = User(nickname="test2", id="new3@com", pw="test-pw")
-    res = service.register(entity1)
+    res = service.register(session=session, entity=entity1)
     with pytest.raises(HTTPException) as e:
-        service.register(entity2)
+        service.register(session=session, entity=entity2)
     assert e.value.status_code == 409
 
-    with sessionmaker(bind=engine)() as session:
-        session.add(res)
-        session.delete(res)
-        session.commit()
+    session.delete(res)
+    session.commit()
