@@ -2,12 +2,16 @@ from fastapi import APIRouter
 
 from fastlib.view.model.api import ApiResponse
 from fastlib.view.model.group import (
+    GroupAdminResponseDto,
     GroupCommentPostRequestDto,
     GroupCommentPostResponseDto,
+    GroupDetailResponseDto,
     GroupNoticeCommentResponseDto,
     GroupNoticeDetailResponseDto,
     GroupNoticePostRequestDto,
     GroupNoticePostResponseDto,
+    GroupNoticeResponseDto,
+    GroupParticipantResponseDto,
     GroupParticipateResponseDto,
     GroupPostRecruitRequestDto,
     GroupPostRecruitResponseDto,
@@ -21,10 +25,9 @@ from fastlib.view.model.group import (
     GroupTaskCompleteAdminRequestDto,
     GroupTaskCompleteResponseDto,
     GroupTaskDetailResponseDto,
-
+    GroupTaskResponseDto,
     GroupNotifyResponseDto,
     GroupApprovePeopleResponseDto,
-
 )
 
 
@@ -163,3 +166,24 @@ def complete_task_user(
 ) -> ApiResponse[GroupTaskCompleteResponseDto]:
     return ApiResponse.ok(GroupTaskCompleteResponseDto(id=task_id))
 
+@router.get("/group/{group_id}")
+def get_group_detail(group_id: int) -> ApiResponse[GroupDetailResponseDto]:
+    res = GroupDetailResponseDto(
+        name="test",
+        admin=GroupAdminResponseDto(id="test-admin", nickname="test-nickname"),
+        participants=[
+            GroupParticipantResponseDto(id="test-participant1", nickname="test"),
+            GroupParticipantResponseDto(id="test-participant2", nickname="test"),
+        ],
+        tasks=[
+            GroupTaskResponseDto(
+                id=1,
+                title="test",
+                start_date="2023-11-11T00:00:00",
+                end_date="2023-11-12T00:00:00",
+                not_started=["p1", "p2"],
+            )
+        ],
+        notices=[GroupNoticeResponseDto(id=1, title="str", author_name="test-name")],
+    )
+    return ApiResponse.ok(res)

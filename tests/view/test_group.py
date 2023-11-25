@@ -10,7 +10,7 @@ from tests.view.schema.group import (
     GroupPostTaskResponseSchema,
 
     GroupCommentPostResponseSchema,
-
+    GroupDetailResponseSchema,
     GroupNoticeDetailResponseSchema,
     GroupNoticePostResponseSchema,
     GroupParticipateResponseSchema,
@@ -197,3 +197,12 @@ def test_group_task_complete_admin():
     assert GroupTaskCompletedResponseSchema().validate(body) == {}
     assert task_id == body["id"]
 
+
+def test_group_detail():
+    from main import app
+
+    client = TestClient(app)
+    res = client.get("/group/1")
+    assert res.status_code == 200
+    body = res.json()["data"]
+    assert GroupDetailResponseSchema().validate(body) == {}
