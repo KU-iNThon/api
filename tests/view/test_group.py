@@ -4,6 +4,7 @@ from fastapi.testclient import TestClient
 
 from tests.view.schema.group import (
     GroupPostRecruitResponseSchema,
+    GroupRecruitDetailResponseSchema,
     GroupRecruitListResponseSchema,
     GroupRegisterResponseSchema,
 )
@@ -56,3 +57,13 @@ def test_group_recruit_search():
     assert res.status_code == 200
     body = res.json()["data"]
     assert GroupRecruitListResponseSchema().validate(body) == {}
+
+
+def test_group_recruit_detail():
+    from main import app
+
+    client = TestClient(app)
+    res = client.get("/group/1/recruit")
+    assert res.status_code == 200
+    body = res.json()["data"]
+    assert GroupRecruitDetailResponseSchema().validate(body) == {}
