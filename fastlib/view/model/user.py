@@ -7,7 +7,6 @@ class UserLoginResponseDto(BaseModel):
     nickname: str
     region: str
 
-
 class UserProfileSummaryResponseDto(BaseModel):
     completed_task: int
     total_task: int
@@ -28,3 +27,14 @@ class UserProfileResponseDto(BaseModel):
     region: str
     groups: list[UserProfileGroupResponseDto]
     summary: UserProfileSummaryResponseDto
+
+class UserRegisterRequestDto(BaseModel):
+    id: str
+    pw: str
+    nickname: str
+    region: str
+
+
+class UserRegisterResponseDto(BaseModel):
+    id: str
+
