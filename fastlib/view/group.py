@@ -41,3 +41,16 @@ def get_recruits() -> ApiResponse[GroupRecruitListResponseDto]:
             ]
         )
     )
+
+
+@router.get("/groups/recruits/search")
+def get_recruits(query: str) -> ApiResponse[GroupRecruitListResponseDto]:
+    return ApiResponse.ok(
+        GroupRecruitListResponseDto(
+            recruits=[
+                GroupRecruitListItemResponseDto(id=1, title="test", description="test", room_name="test"),
+                GroupRecruitListItemResponseDto(id=1, title="test", description="test", room_name="test"),
+                GroupRecruitListItemResponseDto(id=1, title="test", description="test", room_name="test"),
+            ]
+        )
+    )
