@@ -12,6 +12,7 @@ from fastlib.view.model.group import (
     GroupRecruitListResponseDto,
     GroupRegisterRequestDto,
     GroupRegisterResponseDto,
+    GroupTaskDetailResponseDto,
 )
 
 
@@ -75,6 +76,25 @@ def get_recruit_notice_detail(group_id: int, notice_id: int) -> ApiResponse[Grou
             id=notice_id,
             title="test",
             description="test",
+            comments=[
+                GroupNoticeCommentResponseDto(author="test", text="test"),
+                GroupNoticeCommentResponseDto(author="test", text="test"),
+                GroupNoticeCommentResponseDto(author="test", text="test"),
+            ],
+        )
+    )
+
+
+@router.get("/group/{group_id}/task/{task_id}")
+def get_recruit_notice_detail(group_id: int, task_id: int) -> ApiResponse[GroupTaskDetailResponseDto]:
+    return ApiResponse.ok(
+        GroupTaskDetailResponseDto(
+            id=task_id,
+            title="test",
+            start_date="2023-01-01T00:00:00",
+            end_date="2023-01-31T00:00:00",
+            description="test",
+            not_started=["p1", "p2"],
             comments=[
                 GroupNoticeCommentResponseDto(author="test", text="test"),
                 GroupNoticeCommentResponseDto(author="test", text="test"),

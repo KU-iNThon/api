@@ -57,3 +57,12 @@ class GroupNoticeDetailResponseDto(BaseModel):
     title: str
     description: str
     comments: List[GroupNoticeCommentResponseDto]
+
+
+class GroupTaskDetailResponseDto(BaseModel):
+    id: int
+    title: str
+    start_date: str
+    end_date: str
+    not_started: List[str]
+    comments: List[GroupNoticeCommentResponseDto]

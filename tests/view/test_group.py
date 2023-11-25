@@ -8,6 +8,7 @@ from tests.view.schema.group import (
     GroupRecruitDetailResponseSchema,
     GroupRecruitListResponseSchema,
     GroupRegisterResponseSchema,
+    GroupTaskDetailResponseSchema,
 )
 
 
@@ -78,3 +79,13 @@ def test_group_notice_detail():
     assert res.status_code == 200
     body = res.json()["data"]
     assert GroupNoticeDetailResponseSchema().validate(body) == {}
+
+
+def test_group_task_detail():
+    from main import app
+
+    client = TestClient(app)
+    res = client.get("/group/1/task/1")
+    assert res.status_code == 200
+    body = res.json()["data"]
+    assert GroupTaskDetailResponseSchema().validate(body) == {}

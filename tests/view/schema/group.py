@@ -34,7 +34,7 @@ class GroupRecruitDetailResponseSchema(Schema):
     max_people: int = fields.Integer(required=True)
 
 
-class GroupNoticeCommentResponseSchema(Schema):
+class GroupCommentResponseSchema(Schema):
     author: str = fields.String(required=True)
     text: str = fields.String(required=True)
 
@@ -43,6 +43,13 @@ class GroupNoticeDetailResponseSchema(Schema):
     id: int = fields.Integer(required=True)
     title: str = fields.String(required=True)
     description: str = fields.String(required=True)
-    comments: List[GroupNoticeCommentResponseSchema] = fields.Nested(
-        GroupNoticeCommentResponseSchema, many=True, required=True
-    )
+    comments: List[GroupCommentResponseSchema] = fields.Nested(GroupCommentResponseSchema, many=True, required=True)
+
+
+class GroupTaskDetailResponseSchema(Schema):
+    id: int = fields.Integer(required=True)
+    title: str = fields.String(required=True)
+    start_date: str = fields.DateTime(required=True, format="iso")
+    end_date: str = fields.DateTime(required=True, format="iso")
+    not_started: List[str] = fields.List(fields.String(), required=True)
+    comments: List[GroupCommentResponseSchema] = fields.Nested(GroupCommentResponseSchema, required=True, many=True)
