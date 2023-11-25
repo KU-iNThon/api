@@ -3,17 +3,27 @@ import os
 from fastapi.testclient import TestClient
 
 from tests.view.schema.group import (
+
     GroupPostRecruitResponseSchema,
     GroupRegisterResponseSchema,
     GroupParticipateResponseSchema,
     GroupPostTaskResponseSchema,
+
+    GroupCommentPostResponseSchema,
+
     GroupNoticeDetailResponseSchema,
+    GroupNoticePostResponseSchema,
+    GroupParticipateResponseSchema,
     GroupPostRecruitResponseSchema,
+    GroupPostTaskResponseSchema,
     GroupRecruitDetailResponseSchema,
     GroupRecruitListResponseSchema,
     GroupRegisterResponseSchema,
+    GroupTaskCompletedResponseSchema,
     GroupTaskDetailResponseSchema,
+
     GroupNotifyResponseSchema,
+
 )
 
 
@@ -120,6 +130,7 @@ def test_group_task_detail():
     assert GroupTaskDetailResponseSchema().validate(body) == {}
 
 
+
 def test_group_task_notify():
     from main import app
 
@@ -128,3 +139,61 @@ def test_group_task_notify():
     assert res.status_code == 200
     body = res.json()["data"]
     assert GroupNotifyResponseSchema().validate(body) == {}
+
+def test_group_task_complete_user():
+    from main import app
+
+    client = TestClient(app)
+    task_id = 4
+    res = client.post(f"/group/1/task/{task_id}/complete/user")
+    assert res.status_code == 200
+    body = res.json()["data"]
+    assert GroupTaskCompletedResponseSchema().validate(body) == {}
+    assert task_id == body["id"]
+
+
+def test_group_task_comment_post():
+    from main import app
+
+    client = TestClient(app)
+    task_id = 4
+    res = client.post(f"/group/1/task/{task_id}/comment", json={"text": "test-comment"})
+    assert res.status_code == 200
+    body = res.json()["data"]
+    assert GroupCommentPostResponseSchema().validate(body) == {}
+    assert task_id == body["id"]
+
+
+def test_group_notice_comment_post():
+    from main import app
+
+    client = TestClient(app)
+    notice_id = 4
+    res = client.post(f"/group/1/notice/{notice_id}/comment", json={"text": "test-comment"})
+    assert res.status_code == 200
+    body = res.json()["data"]
+    assert GroupCommentPostResponseSchema().validate(body) == {}
+    assert notice_id == body["id"]
+
+
+def test_group_notice_post():
+    from main import app
+
+    client = TestClient(app)
+    res = client.post("/group/1/notice", json={"title": "title", "description": "description"})
+    assert res.status_code == 200
+    body = res.json()["data"]
+    assert GroupNoticePostResponseSchema().validate(body) == {}
+
+
+def test_group_task_complete_admin():
+    from main import app
+
+    client = TestClient(app)
+    task_id = 4
+    res = client.post(f"/group/1/task/{task_id}/complete/admin", json={"participant_id": 1})
+    assert res.status_code == 200
+    body = res.json()["data"]
+    assert GroupTaskCompletedResponseSchema().validate(body) == {}
+    assert task_id == body["id"]
+

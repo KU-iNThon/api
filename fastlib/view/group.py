@@ -2,21 +2,29 @@ from fastapi import APIRouter
 
 from fastlib.view.model.api import ApiResponse
 from fastlib.view.model.group import (
+    GroupCommentPostRequestDto,
+    GroupCommentPostResponseDto,
     GroupNoticeCommentResponseDto,
     GroupNoticeDetailResponseDto,
+    GroupNoticePostRequestDto,
+    GroupNoticePostResponseDto,
     GroupParticipateResponseDto,
     GroupPostRecruitRequestDto,
     GroupPostRecruitResponseDto,
+    GroupPostTaskRequestDto,
+    GroupPostTaskResponseDto,
     GroupRecruitDetailResponseDto,
     GroupRecruitListItemResponseDto,
     GroupRecruitListResponseDto,
     GroupRegisterRequestDto,
     GroupRegisterResponseDto,
-    GroupPostTaskRequestDto,
-    GroupPostTaskResponseDto,
+    GroupTaskCompleteAdminRequestDto,
+    GroupTaskCompleteResponseDto,
     GroupTaskDetailResponseDto,
+
     GroupNotifyResponseDto,
     GroupApprovePeopleResponseDto,
+
 )
 
 
@@ -113,6 +121,7 @@ def get_recruit_notice_detail(group_id: int, task_id: int) -> ApiResponse[GroupT
     )
 
 
+
 @router.get("/group/{group_id}/task/{task_id}/notify")
 def get_notify(group_id: int, task_id: int) -> ApiResponse[GroupNotifyResponseDto]:
     return ApiResponse.ok(
@@ -123,3 +132,34 @@ def get_notify(group_id: int, task_id: int) -> ApiResponse[GroupNotifyResponseDt
             ]
         )
     )
+
+@router.post("/group/{group_id}/task/{task_id}/complete/user")
+def complete_task_user(group_id: int, task_id: int) -> ApiResponse[GroupTaskCompleteResponseDto]:
+    return ApiResponse.ok(GroupTaskCompleteResponseDto(id=task_id))
+
+
+@router.post("/group/{group_id}/notice/{notice_id}/comment")
+def comment_notice(
+    group_id: int, notice_id: int, req: GroupCommentPostRequestDto
+) -> ApiResponse[GroupCommentPostResponseDto]:
+    return ApiResponse.ok(GroupCommentPostResponseDto(id=notice_id))
+
+
+@router.post("/group/{group_id}/task/{task_id}/comment")
+def comment_task(
+    group_id: int, task_id: int, req: GroupCommentPostRequestDto
+) -> ApiResponse[GroupCommentPostResponseDto]:
+    return ApiResponse.ok(GroupCommentPostResponseDto(id=task_id))
+
+
+@router.post("/group/{group_id}/notice")
+def create_notice(group_id: int, req: GroupNoticePostRequestDto) -> ApiResponse[GroupNoticePostResponseDto]:
+    return ApiResponse.ok(GroupNoticePostResponseDto(id=1))
+
+
+@router.post("/group/{group_id}/task/{task_id}/complete/admin")
+def complete_task_user(
+    group_id: int, task_id: int, req: GroupTaskCompleteAdminRequestDto
+) -> ApiResponse[GroupTaskCompleteResponseDto]:
+    return ApiResponse.ok(GroupTaskCompleteResponseDto(id=task_id))
+
