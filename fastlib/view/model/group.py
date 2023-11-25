@@ -97,3 +97,7 @@ class GroupNoticePostRequestDto(BaseModel):
 
 class GroupNoticePostResponseDto(BaseModel):
     id: int
+
+
+class GroupTaskCompleteAdminRequestDto(BaseModel):
+    participant_id: int

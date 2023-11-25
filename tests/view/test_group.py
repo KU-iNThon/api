@@ -164,3 +164,15 @@ def test_group_notice_post():
     assert res.status_code == 200
     body = res.json()["data"]
     assert GroupNoticePostResponseSchema().validate(body) == {}
+
+
+def test_group_task_complete_admin():
+    from main import app
+
+    client = TestClient(app)
+    task_id = 4
+    res = client.post(f"/group/1/task/{task_id}/complete/admin", json={"participant_id": 1})
+    assert res.status_code == 200
+    body = res.json()["data"]
+    assert GroupTaskCompletedResponseSchema().validate(body) == {}
+    assert task_id == body["id"]
