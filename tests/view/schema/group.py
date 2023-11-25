@@ -11,7 +11,6 @@ class GroupPostRecruitResponseSchema(Schema):
     id: int = fields.Integer(required=True)
 
 
-
 class GroupParticipateResponseSchema(Schema):
     id: int = fields.Integer(required=True)
 
@@ -19,7 +18,7 @@ class GroupParticipateResponseSchema(Schema):
 class GroupPostTaskResponseSchema(Schema):
     id: int = fields.Integer(required=True)
 
-      
+
 class _GroupRecruitListResponseSchema(Schema):
     id: int = fields.Integer(required=True)
     title: str = fields.String(required=True)
@@ -62,3 +61,14 @@ class GroupTaskDetailResponseSchema(Schema):
     end_date: str = fields.DateTime(required=True, format="iso")
     not_started: List[str] = fields.List(fields.String(), required=True)
     comments: List[GroupCommentResponseSchema] = fields.Nested(GroupCommentResponseSchema, required=True, many=True)
+
+
+class GroupApprovePeopleResponseSchema(Schema):
+    id: int = fields.Integer(required=True)
+    nickname: str = fields.String(required=True)
+
+
+class GroupNotifyResponseSchema(Schema):
+    users: List[GroupApprovePeopleResponseSchema] = fields.Nested(
+        GroupApprovePeopleResponseSchema, required=True, many=True
+    )
