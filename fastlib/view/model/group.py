@@ -55,6 +55,7 @@ class GroupRecruitDetailResponseDto(BaseModel):
     description: str
     people: int
     max_people: int
+    tags: List[str]
 
 
 class GroupNoticeCommentResponseDto(BaseModel):

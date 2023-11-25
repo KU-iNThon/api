@@ -40,6 +40,7 @@ class GroupRecruitDetailResponseSchema(Schema):
     description: str = fields.String(required=True)
     people: int = fields.Integer(required=True)
     max_people: int = fields.Integer(required=True)
+    tags: List[str] = fields.List(fields.Str(), required=True)
 
 
 class GroupCommentResponseSchema(Schema):

@@ -1,14 +1,12 @@
-from fastapi import APIRouter, Response
+from fastapi import APIRouter
 from sqlalchemy import create_engine
-from sqlalchemy.orm import sessionmaker
 
 from fastlib.entity.base import Base
-
-
 from fastlib.service.participant import ParticipantService
 from fastlib.view.model.api import ApiResponse
 from fastlib.view.model.group import (
     GroupAdminResponseDto,
+    GroupApprovePeopleResponseDto,
     GroupCommentPostRequestDto,
     GroupCommentPostResponseDto,
     GroupDetailResponseDto,
@@ -17,6 +15,7 @@ from fastlib.view.model.group import (
     GroupNoticePostRequestDto,
     GroupNoticePostResponseDto,
     GroupNoticeResponseDto,
+    GroupNotifyResponseDto,
     GroupParticipantResponseDto,
     GroupParticipateResponseDto,
     GroupPostRecruitRequestDto,
@@ -32,8 +31,6 @@ from fastlib.view.model.group import (
     GroupTaskCompleteResponseDto,
     GroupTaskDetailResponseDto,
     GroupTaskResponseDto,
-    GroupNotifyResponseDto,
-    GroupApprovePeopleResponseDto,
 )
 
 
@@ -94,7 +91,14 @@ def get_recruits(query: str) -> ApiResponse[GroupRecruitListResponseDto]:
 def get_recruit_detail(group_id: int) -> ApiResponse[GroupRecruitDetailResponseDto]:
     return ApiResponse.ok(
         GroupRecruitDetailResponseDto(
-            id=1, title="test", room_name="test", admin_name="test", description="test", people=1, max_people=2
+            id=1,
+            title="test",
+            room_name="test",
+            admin_name="test",
+            description="test",
+            people=1,
+            max_people=2,
+            tags=["a", "b"],
         )
     )
 
