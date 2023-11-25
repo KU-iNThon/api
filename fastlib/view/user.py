@@ -1,23 +1,30 @@
 from fastapi import APIRouter, Response
+from sqlalchemy import create_engine
+from sqlalchemy.orm import sessionmaker
 
+from fastlib.business.model.user import UserLoginResponseDto, UserRegisterRequestDto, UserRegisterResponseDto
+from fastlib.business.user import UserBusiness
+from fastlib.service.user import UserService
 from fastlib.view.model.api import ApiResponse
 from fastlib.view.model.user import (
-    UserLoginResponseDto,
     UserProfileGroupResponseDto,
     UserProfileResponseDto,
     UserProfileSummaryResponseDto,
-    UserRegisterRequestDto,
-    UserRegisterResponseDto,
 )
 
 
 router = APIRouter()
 
+engine = create_engine("mysql+pymysql://root:1234@127.0.0.1:3306/ku", echo=True)
+user_service = UserService(engine=engine)
+user_business = UserBusiness(session=sessionmaker(bind=engine), user_service=user_service)
+
 
 @router.get("/user/login")
 def login(id: str, pw: str, response: Response) -> ApiResponse[UserLoginResponseDto]:
-    response.set_cookie("session_id", id)
-    return ApiResponse.ok(UserLoginResponseDto(id=id, nickname="test", region="korea"))
+    res = user_business.login(id, pw)
+    response.set_cookie("session_id", res.id)
+    return ApiResponse.ok(res)
 
 
 @router.get("/user/{user_id}")
@@ -40,4 +47,5 @@ def profile(user_id: str) -> ApiResponse[UserProfileResponseDto]:
 
 @router.post("/user/register")
 def register(request: UserRegisterRequestDto) -> ApiResponse[UserRegisterResponseDto]:
-    return ApiResponse.ok(UserRegisterResponseDto(id="test-id"))
+    res = user_business.register(request)
+    return ApiResponse.ok(res)
