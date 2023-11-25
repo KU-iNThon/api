@@ -20,3 +20,6 @@ class Comment(Base):
     group = relationship("Group")
     notice = relationship("Notice")
     task = relationship("Task")
+
+
+Base.metadata.create_all(bind=engine)
