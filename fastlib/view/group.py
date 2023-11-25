@@ -9,6 +9,8 @@ from fastlib.view.model.group import (
     GroupPostRecruitResponseDto,
     GroupRegisterRequestDto,
     GroupRegisterResponseDto,
+    GroupPostTaskRequestDto,
+    GroupPostTaskResponseDto,
 )
 
 
@@ -21,10 +23,15 @@ def register(req: GroupRegisterRequestDto) -> ApiResponse[GroupRegisterResponseD
 
 
 @router.post("/group/{room_id}/participate")
-def participate(room_id: int) -> GroupParticipateResponseDto:
+def participate(room_id: int) -> ApiResponse[GroupParticipateResponseDto]:
     return ApiResponse.ok(GroupParticipateResponseDto(id=1))
 
 
 @router.post("/group/{group_id}/recruit")
-def post_recruit(req: GroupPostRecruitRequestDto) -> ApiResponse[GroupPostRecruitResponseDto]:
+def post_recruit(group_id: int, req: GroupPostRecruitRequestDto) -> ApiResponse[GroupPostRecruitResponseDto]:
     return ApiResponse.ok(GroupPostRecruitResponseDto(id=1))
+
+
+@router.post("/group/{room_id}/task")
+def post_task(room_id: int, req: GroupPostTaskRequestDto) -> ApiResponse[GroupPostTaskResponseDto]:
+    return ApiResponse.ok(GroupPostTaskResponseDto(id=1))
