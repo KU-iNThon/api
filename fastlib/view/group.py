@@ -6,6 +6,8 @@ from fastlib.view.model.group import (
     GroupCommentPostResponseDto,
     GroupNoticeCommentResponseDto,
     GroupNoticeDetailResponseDto,
+    GroupNoticePostRequestDto,
+    GroupNoticePostResponseDto,
     GroupParticipateResponseDto,
     GroupPostRecruitRequestDto,
     GroupPostRecruitResponseDto,
@@ -131,3 +133,8 @@ def comment_task(
     group_id: int, task_id: int, req: GroupCommentPostRequestDto
 ) -> ApiResponse[GroupCommentPostResponseDto]:
     return ApiResponse.ok(GroupCommentPostResponseDto(id=task_id))
+
+
+@router.post("/group/{group_id}/notice")
+def create_notice(group_id: int, req: GroupNoticePostRequestDto) -> ApiResponse[GroupNoticePostResponseDto]:
+    return ApiResponse.ok(GroupNoticePostResponseDto(id=1))

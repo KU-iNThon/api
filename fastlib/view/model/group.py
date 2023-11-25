@@ -88,3 +88,12 @@ class GroupCommentPostRequestDto(BaseModel):
 
 class GroupCommentPostResponseDto(BaseModel):
     id: int
+
+
+class GroupNoticePostRequestDto(BaseModel):
+    title: str
+    description: str
+
+
+class GroupNoticePostResponseDto(BaseModel):
+    id: int

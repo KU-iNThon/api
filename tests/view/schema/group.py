@@ -69,3 +69,7 @@ class GroupTaskCompletedResponseSchema(Schema):
 
 class GroupCommentPostResponseSchema(Schema):
     id: int = fields.Integer(required=True)
+
+
+class GroupNoticePostResponseSchema(Schema):
+    id: int = fields.Integer(required=True)
