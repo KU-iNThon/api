@@ -31,3 +31,4 @@ class UserProfileResponseSchema(Schema):
     region: str = fields.Str(required=True)
     groups: list = fields.Nested(UserProfileGroupResponseDto, required=True, many=True)
     summary: dict = fields.Nested(UserProfileSummaryResponseDto, required=True)
+    credit: int = fields.Int(required=True)
