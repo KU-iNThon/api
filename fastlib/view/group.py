@@ -2,6 +2,8 @@ from fastapi import APIRouter
 
 from fastlib.view.model.api import ApiResponse
 from fastlib.view.model.group import (
+    GroupNoticeCommentResponseDto,
+    GroupNoticeDetailResponseDto,
     GroupParticipateResponseDto,
     GroupPostRecruitRequestDto,
     GroupPostRecruitResponseDto,
@@ -62,5 +64,21 @@ def get_recruit_detail(group_id: int) -> ApiResponse[GroupRecruitDetailResponseD
     return ApiResponse.ok(
         GroupRecruitDetailResponseDto(
             id=1, title="test", room_name="test", admin_name="test", description="test", people=1, max_people=2
+        )
+    )
+
+
+@router.get("/group/{group_id}/notice/{notice_id}")
+def get_recruit_notice_detail(group_id: int, notice_id: int) -> ApiResponse[GroupNoticeDetailResponseDto]:
+    return ApiResponse.ok(
+        GroupNoticeDetailResponseDto(
+            id=notice_id,
+            title="test",
+            description="test",
+            comments=[
+                GroupNoticeCommentResponseDto(author="test", text="test"),
+                GroupNoticeCommentResponseDto(author="test", text="test"),
+                GroupNoticeCommentResponseDto(author="test", text="test"),
+            ],
         )
     )

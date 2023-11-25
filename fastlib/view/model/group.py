@@ -45,3 +45,15 @@ class GroupRecruitDetailResponseDto(BaseModel):
     description: str
     people: int
     max_people: int
+
+
+class GroupNoticeCommentResponseDto(BaseModel):
+    author: str
+    text: str
+
+
+class GroupNoticeDetailResponseDto(BaseModel):
+    id: int
+    title: str
+    description: str
+    comments: List[GroupNoticeCommentResponseDto]
