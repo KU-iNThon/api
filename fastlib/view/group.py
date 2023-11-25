@@ -2,11 +2,11 @@ from fastapi import APIRouter
 
 from fastlib.view.model.api import ApiResponse
 from fastlib.view.model.group import (
-    GroupRegisterRequestDto,
-    GroupRegisterResponseDto,
     GroupParticipateResponseDto,
     GroupPostRecruitRequestDto,
     GroupPostRecruitResponseDto,
+    GroupRecruitListItemResponseDto,
+    GroupRecruitListResponseDto,
     GroupRegisterRequestDto,
     GroupRegisterResponseDto,
 )
@@ -28,3 +28,16 @@ def participate(room_id: int) -> GroupParticipateResponseDto:
 @router.post("/group/{group_id}/recruit")
 def post_recruit(req: GroupPostRecruitRequestDto) -> ApiResponse[GroupPostRecruitResponseDto]:
     return ApiResponse.ok(GroupPostRecruitResponseDto(id=1))
+
+
+@router.get("/groups/recruits")
+def get_recruits() -> ApiResponse[GroupRecruitListResponseDto]:
+    return ApiResponse.ok(
+        GroupRecruitListResponseDto(
+            recruits=[
+                GroupRecruitListItemResponseDto(id=1, title="test", description="test", room_name="test"),
+                GroupRecruitListItemResponseDto(id=1, title="test", description="test", room_name="test"),
+                GroupRecruitListItemResponseDto(id=1, title="test", description="test", room_name="test"),
+            ]
+        )
+    )

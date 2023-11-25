@@ -24,3 +24,14 @@ class GroupPostRecruitRequestDto(BaseModel):
 
 class GroupPostRecruitResponseDto(BaseModel):
     id: int
+
+
+class GroupRecruitListItemResponseDto(BaseModel):
+    id: int
+    title: str
+    description: str
+    room_name: str
+
+
+class GroupRecruitListResponseDto(BaseModel):
+    recruits: List[GroupRecruitListItemResponseDto]
