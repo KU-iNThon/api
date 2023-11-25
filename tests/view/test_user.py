@@ -1,9 +1,8 @@
 import os
 
-import dotenv
 from fastapi.testclient import TestClient
 
-from tests.view.schema.user import UserLoginResponseSchema
+from tests.view.schema.user import UserLoginResponseSchema, UserRegisterResponseSchema
 
 
 while "tests" not in os.listdir():
@@ -23,3 +22,17 @@ def test_user_login():
     assert UserLoginResponseSchema().validate(body) == {}
     set_cookies: str = res.headers["set-cookie"]
     assert set_cookies.find("session_id=test-id") != -1
+
+
+def test_user_register():
+    from main import app
+
+    # given
+    client = TestClient(app)
+    # when
+    res = client.post("/user/register", json={"id": "test_id", "pw": "test-pw", "nickname": "test", "region": "region"})
+    # then
+    assert res.status_code == 200
+
+    body = res.json()["data"]
+    assert UserRegisterResponseSchema().validate(body) == {}
