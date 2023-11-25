@@ -1,11 +1,11 @@
 from pydantic import BaseModel
-from typing import List
 
 
 class UserLoginResponseDto(BaseModel):
     id: str
     nickname: str
     region: str
+
 
 class UserProfileSummaryResponseDto(BaseModel):
     completed_task: int
@@ -27,6 +27,8 @@ class UserProfileResponseDto(BaseModel):
     region: str
     groups: list[UserProfileGroupResponseDto]
     summary: UserProfileSummaryResponseDto
+    credit: int
+
 
 class UserRegisterRequestDto(BaseModel):
     id: str
@@ -37,4 +39,3 @@ class UserRegisterRequestDto(BaseModel):
 
 class UserRegisterResponseDto(BaseModel):
     id: str
-
