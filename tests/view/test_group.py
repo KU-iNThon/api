@@ -2,8 +2,7 @@ import os
 
 from fastapi.testclient import TestClient
 
-from tests.view.schema.group import GroupRegisterResponseSchema
-from tests.view.schema.user import UserLoginResponseSchema
+from tests.view.schema.group import GroupPostRecruitResponseSchema, GroupRegisterResponseSchema
 
 
 while "tests" not in os.listdir():
@@ -21,3 +20,15 @@ def test_group_register():
     assert res.status_code == 200
     body = res.json()["data"]
     assert GroupRegisterResponseSchema().validate(body) == {}
+
+
+def test_group_post_recruit():
+    from main import app
+
+    client = TestClient(app)
+    res = client.post(
+        "/group/1/recruit", json={"title": "test-title", "description": "description", "tags": ["tag-a", "tag-b"]}
+    )
+    assert res.status_code == 200
+    body = res.json()["data"]
+    assert GroupPostRecruitResponseSchema().validate(body) == {}
