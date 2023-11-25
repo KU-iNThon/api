@@ -46,3 +46,13 @@ def test_group_recruit_list():
     assert res.status_code == 200
     body = res.json()["data"]
     assert GroupRecruitListResponseSchema().validate(body) == {}
+
+
+def test_group_recruit_search():
+    from main import app
+
+    client = TestClient(app)
+    res = client.get("/groups/recruits/search?query=test")
+    assert res.status_code == 200
+    body = res.json()["data"]
+    assert GroupRecruitListResponseSchema().validate(body) == {}
