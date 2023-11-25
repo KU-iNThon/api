@@ -22,3 +22,13 @@ class GroupRecruitListResponseSchema(Schema):
     recruits: List[_GroupRecruitListResponseSchema] = fields.Nested(
         _GroupRecruitListResponseSchema, many=True, required=True
     )
+
+
+class GroupRecruitDetailResponseSchema(Schema):
+    id: int = fields.Integer(required=True)
+    title: str = fields.String(required=True)
+    room_name: str = fields.String(required=True)
+    admin_name: str = fields.String(required=True)
+    description: str = fields.String(required=True)
+    people: int = fields.Integer(required=True)
+    max_people: int = fields.Integer(required=True)

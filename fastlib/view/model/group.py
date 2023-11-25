@@ -35,3 +35,13 @@ class GroupRecruitListItemResponseDto(BaseModel):
 
 class GroupRecruitListResponseDto(BaseModel):
     recruits: List[GroupRecruitListItemResponseDto]
+
+
+class GroupRecruitDetailResponseDto(BaseModel):
+    title: str
+    id: int
+    room_name: str
+    admin_name: str
+    description: str
+    people: int
+    max_people: int

@@ -5,6 +5,7 @@ from fastlib.view.model.group import (
     GroupParticipateResponseDto,
     GroupPostRecruitRequestDto,
     GroupPostRecruitResponseDto,
+    GroupRecruitDetailResponseDto,
     GroupRecruitListItemResponseDto,
     GroupRecruitListResponseDto,
     GroupRegisterRequestDto,
@@ -52,5 +53,14 @@ def get_recruits(query: str) -> ApiResponse[GroupRecruitListResponseDto]:
                 GroupRecruitListItemResponseDto(id=1, title="test", description="test", room_name="test"),
                 GroupRecruitListItemResponseDto(id=1, title="test", description="test", room_name="test"),
             ]
+        )
+    )
+
+
+@router.get("/group/{group_id}/recruit")
+def get_recruit_detail(group_id: int) -> ApiResponse[GroupRecruitDetailResponseDto]:
+    return ApiResponse.ok(
+        GroupRecruitDetailResponseDto(
+            id=1, title="test", room_name="test", admin_name="test", description="test", people=1, max_people=2
         )
     )
