@@ -12,6 +12,10 @@ class GroupRegisterResponseDto(BaseModel):
     id: int
 
 
+class GroupParticipateResponseDto(BaseModel):
+    id: int
+
+
 class GroupPostRecruitRequestDto(BaseModel):
     title: str
     description: str
