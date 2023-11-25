@@ -73,3 +73,37 @@ class GroupCommentPostResponseSchema(Schema):
 
 class GroupNoticePostResponseSchema(Schema):
     id: int = fields.Integer(required=True)
+
+
+class GroupAdminResponseSchema(Schema):
+    id: str = fields.Str(required=True)
+    nickname: str = fields.Str(required=True)
+
+
+class GroupParticipantResponseSchema(Schema):
+    id: str = fields.Str(required=True)
+    nickname: str = fields.Str(required=True)
+
+
+class GroupTaskResponseSchema(Schema):
+    id: int = fields.Int(required=True)
+    title: str = fields.Str(required=True)
+    start_date: str = fields.DateTime(required=True, format="iso")
+    end_date: str = fields.DateTime(required=True, format="iso")
+    not_started: List[str] = fields.List(fields.Str(), required=True)
+
+
+class GroupNoticeResponseSchema(Schema):
+    id: int = fields.Int(required=True)
+    title: str = fields.Str(required=True)
+    author_name: str = fields.Str(required=True)
+
+
+class GroupDetailResponseSchema(Schema):
+    name: str = fields.Str(required=True)
+    admin: GroupAdminResponseSchema = fields.Nested(GroupAdminResponseSchema, required=True)
+    participants: List[GroupParticipantResponseSchema] = fields.Nested(
+        GroupParticipantResponseSchema, required=True, many=True
+    )
+    tasks: List[GroupTaskResponseSchema] = fields.Nested(GroupTaskResponseSchema, many=True, required=True)
+    notices: List[GroupNoticeResponseSchema] = fields.Nested(GroupNoticeResponseSchema, many=True, required=True)

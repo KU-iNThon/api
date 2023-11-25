@@ -101,3 +101,35 @@ class GroupNoticePostResponseDto(BaseModel):
 
 class GroupTaskCompleteAdminRequestDto(BaseModel):
     participant_id: int
+
+
+class GroupAdminResponseDto(BaseModel):
+    id: str
+    nickname: str
+
+
+class GroupParticipantResponseDto(BaseModel):
+    id: str
+    nickname: str
+
+
+class GroupTaskResponseDto(BaseModel):
+    id: int
+    title: str
+    start_date: str
+    end_date: str
+    not_started: List[str]
+
+
+class GroupNoticeResponseDto(BaseModel):
+    id: int
+    title: str
+    author_name: str
+
+
+class GroupDetailResponseDto(BaseModel):
+    name: str
+    admin: GroupAdminResponseDto
+    participants: List[GroupParticipantResponseDto]
+    tasks: List[GroupTaskResponseDto]
+    notices: List[GroupNoticeResponseDto]
