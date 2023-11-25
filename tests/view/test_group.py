@@ -3,6 +3,7 @@ import os
 from fastapi.testclient import TestClient
 
 from tests.view.schema.group import (
+    GroupCommentPostResponseSchema,
     GroupNoticeDetailResponseSchema,
     GroupParticipateResponseSchema,
     GroupPostRecruitResponseSchema,
@@ -128,3 +129,27 @@ def test_group_task_complete_user():
     body = res.json()["data"]
     assert GroupTaskCompletedResponseSchema().validate(body) == {}
     assert task_id == body["id"]
+
+
+def test_group_task_comment_post():
+    from main import app
+
+    client = TestClient(app)
+    task_id = 4
+    res = client.post(f"/group/1/task/{task_id}/comment", json={"text": "test-comment"})
+    assert res.status_code == 200
+    body = res.json()["data"]
+    assert GroupCommentPostResponseSchema().validate(body) == {}
+    assert task_id == body["id"]
+
+
+def test_group_notice_comment_post():
+    from main import app
+
+    client = TestClient(app)
+    notice_id = 4
+    res = client.post(f"/group/1/notice/{notice_id}/comment", json={"text": "test-comment"})
+    assert res.status_code == 200
+    body = res.json()["data"]
+    assert GroupCommentPostResponseSchema().validate(body) == {}
+    assert notice_id == body["id"]

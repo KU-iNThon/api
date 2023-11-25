@@ -80,3 +80,11 @@ class GroupTaskDetailResponseDto(BaseModel):
 
 class GroupTaskCompleteResponseDto(BaseModel):
     id: int
+
+
+class GroupCommentPostRequestDto(BaseModel):
+    text: str
+
+
+class GroupCommentPostResponseDto(BaseModel):
+    id: int
