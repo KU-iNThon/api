@@ -78,6 +78,16 @@ class GroupTaskDetailResponseDto(BaseModel):
     comments: List[GroupNoticeCommentResponseDto]
 
 
+
+class GroupApprovePeopleResponseDto(BaseModel):
+    id: int
+    nickname: str
+
+
+class GroupNotifyResponseDto(BaseModel):
+    users: List[GroupApprovePeopleResponseDto]
+
+      
 class GroupTaskCompleteResponseDto(BaseModel):
     id: int
 
@@ -101,3 +111,4 @@ class GroupNoticePostResponseDto(BaseModel):
 
 class GroupTaskCompleteAdminRequestDto(BaseModel):
     participant_id: int
+

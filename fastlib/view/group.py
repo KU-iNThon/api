@@ -21,6 +21,10 @@ from fastlib.view.model.group import (
     GroupTaskCompleteAdminRequestDto,
     GroupTaskCompleteResponseDto,
     GroupTaskDetailResponseDto,
+
+    GroupNotifyResponseDto,
+    GroupApprovePeopleResponseDto,
+
 )
 
 
@@ -117,6 +121,18 @@ def get_recruit_notice_detail(group_id: int, task_id: int) -> ApiResponse[GroupT
     )
 
 
+
+@router.get("/group/{group_id}/task/{task_id}/notify")
+def get_notify(group_id: int, task_id: int) -> ApiResponse[GroupNotifyResponseDto]:
+    return ApiResponse.ok(
+        GroupNotifyResponseDto(
+            users=[
+                GroupApprovePeopleResponseDto(id="1", nickname="nicknmae"),
+                GroupApprovePeopleResponseDto(id="1", nickname="nicknmae"),
+            ]
+        )
+    )
+
 @router.post("/group/{group_id}/task/{task_id}/complete/user")
 def complete_task_user(group_id: int, task_id: int) -> ApiResponse[GroupTaskCompleteResponseDto]:
     return ApiResponse.ok(GroupTaskCompleteResponseDto(id=task_id))
@@ -146,3 +162,4 @@ def complete_task_user(
     group_id: int, task_id: int, req: GroupTaskCompleteAdminRequestDto
 ) -> ApiResponse[GroupTaskCompleteResponseDto]:
     return ApiResponse.ok(GroupTaskCompleteResponseDto(id=task_id))
+
