@@ -1,6 +1,7 @@
+from fastapi import HTTPException
 from sqlalchemy.orm import sessionmaker
 
-from fastlib.business.model.user import UserRegisterRequestDto, UserRegisterResponseDto
+from fastlib.business.model.user import UserLoginResponseDto, UserRegisterRequestDto, UserRegisterResponseDto
 from fastlib.entity.user import User
 from fastlib.service.user import UserService
 
@@ -17,3 +18,12 @@ class UserBusiness:
             res = UserRegisterResponseDto(id=result.id)
             session.commit()
         return res
+
+    def login(self, user_id: str, user_pw: str) -> UserLoginResponseDto:
+        with self.__session() as session:
+            entity = User(id=user_id)
+            result = self.__user_service.login(session=session, entity=entity)
+            if result.pw != user_pw:
+                raise HTTPException(status_code=400, detail="비밀번호가 틀립니다.")
+            else:
+                return UserLoginResponseDto(id=result.id, nickname=result.nickname, region=result.region)

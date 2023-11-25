@@ -10,3 +10,9 @@ class UserRegisterRequestDto(BaseModel):
 
 class UserRegisterResponseDto(BaseModel):
     id: str
+
+
+class UserLoginResponseDto(BaseModel):
+    id: str
+    nickname: str
+    region: str
