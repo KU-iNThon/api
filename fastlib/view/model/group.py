@@ -8,3 +8,7 @@ class GroupRegisterRequestDto(BaseModel):
 
 class GroupRegisterResponseDto(BaseModel):
     id: int
+
+
+class GroupParticipateResponseDto(BaseModel):
+    id: int
