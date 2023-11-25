@@ -3,6 +3,12 @@ import os
 from fastapi.testclient import TestClient
 
 from tests.view.schema.group import (
+
+    GroupPostRecruitResponseSchema,
+    GroupRegisterResponseSchema,
+    GroupParticipateResponseSchema,
+    GroupPostTaskResponseSchema,
+
     GroupCommentPostResponseSchema,
     GroupDetailResponseSchema,
     GroupNoticeDetailResponseSchema,
@@ -15,6 +21,9 @@ from tests.view.schema.group import (
     GroupRegisterResponseSchema,
     GroupTaskCompletedResponseSchema,
     GroupTaskDetailResponseSchema,
+
+    GroupNotifyResponseSchema,
+
 )
 
 
@@ -120,6 +129,16 @@ def test_group_task_detail():
     body = res.json()["data"]
     assert GroupTaskDetailResponseSchema().validate(body) == {}
 
+
+
+def test_group_task_notify():
+    from main import app
+
+    client = TestClient(app)
+    res = client.get("/group/1/task/1/notify")
+    assert res.status_code == 200
+    body = res.json()["data"]
+    assert GroupNotifyResponseSchema().validate(body) == {}
 
 def test_group_task_complete_user():
     from main import app
