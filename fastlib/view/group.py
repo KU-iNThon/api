@@ -124,7 +124,6 @@ def get_recruit_notice_detail(group_id: int, task_id: int) -> ApiResponse[GroupT
     )
 
 
-
 @router.get("/group/{group_id}/task/{task_id}/notify")
 def get_notify(group_id: int, task_id: int) -> ApiResponse[GroupNotifyResponseDto]:
     return ApiResponse.ok(
@@ -135,6 +134,7 @@ def get_notify(group_id: int, task_id: int) -> ApiResponse[GroupNotifyResponseDt
             ]
         )
     )
+
 
 @router.post("/group/{group_id}/task/{task_id}/complete/user")
 def complete_task_user(group_id: int, task_id: int) -> ApiResponse[GroupTaskCompleteResponseDto]:
@@ -166,6 +166,7 @@ def complete_task_user(
 ) -> ApiResponse[GroupTaskCompleteResponseDto]:
     return ApiResponse.ok(GroupTaskCompleteResponseDto(id=task_id))
 
+
 @router.get("/group/{group_id}")
 def get_group_detail(group_id: int) -> ApiResponse[GroupDetailResponseDto]:
     res = GroupDetailResponseDto(
@@ -185,5 +186,6 @@ def get_group_detail(group_id: int) -> ApiResponse[GroupDetailResponseDto]:
             )
         ],
         notices=[GroupNoticeResponseDto(id=1, title="str", author_name="test-name")],
+        description="...",
     )
     return ApiResponse.ok(res)

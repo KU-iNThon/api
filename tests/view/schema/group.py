@@ -6,7 +6,7 @@ from marshmallow import Schema, fields
 class GroupRegisterResponseSchema(Schema):
     id: int = fields.Integer(required=True)
 
-      
+
 class GroupPostRecruitResponseSchema(Schema):
     id: int = fields.Integer(required=True)
 
@@ -73,6 +73,7 @@ class GroupNotifyResponseSchema(Schema):
         GroupApprovePeopleResponseSchema, required=True, many=True
     )
 
+
 class GroupTaskCompletedResponseSchema(Schema):
     id: int = fields.Integer(required=True)
 
@@ -117,3 +118,4 @@ class GroupDetailResponseSchema(Schema):
     )
     tasks: List[GroupTaskResponseSchema] = fields.Nested(GroupTaskResponseSchema, many=True, required=True)
     notices: List[GroupNoticeResponseSchema] = fields.Nested(GroupNoticeResponseSchema, many=True, required=True)
+    description: str = fields.Str(required=True)
