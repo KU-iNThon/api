@@ -26,7 +26,6 @@ class GroupPostRecruitResponseDto(BaseModel):
     id: int
 
 
-
 class GroupPostTaskRequestDto(BaseModel):
     title: str
     start_date: str
@@ -36,7 +35,7 @@ class GroupPostTaskRequestDto(BaseModel):
 class GroupPostTaskResponseDto(BaseModel):
     id: int
 
-      
+
 class GroupRecruitListItemResponseDto(BaseModel):
     id: int
     title: str
@@ -78,3 +77,6 @@ class GroupTaskDetailResponseDto(BaseModel):
     not_started: List[str]
     comments: List[GroupNoticeCommentResponseDto]
 
+
+class GroupTaskCompleteResponseDto(BaseModel):
+    id: int
