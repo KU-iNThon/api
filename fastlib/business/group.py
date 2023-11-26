@@ -9,6 +9,8 @@ from fastlib.business.model.group import (
     GroupPostRecruitResponseDto,
     GroupPostTaskRequestDto,
     GroupPostTaskResponseDto,
+    GroupRecruitListItemResponseDto,
+    GroupRecruitListResponseDto,
     GroupRegisterRequestDto,
     GroupRegisterResponseDto,
 )
@@ -123,4 +125,18 @@ class GroupBusiness:
             task = self.__task_service.save(session=session, entity=task)
             session.commit()
             res = GroupPostTaskResponseDto(id=task.id)
+        return res
+
+    def get_recruits(self) -> GroupRecruitListResponseDto:
+        res = GroupRecruitListResponseDto(recruits=[])
+        with self.__session() as session:
+            entities = session.query(Recruit).all()
+            for e in entities:
+                t = GroupRecruitListItemResponseDto(
+                    id=e.id,
+                    title=e.title,
+                    description=e.description,
+                    room_name=e.group.name,
+                )
+                res.recruits.append(t)
         return res

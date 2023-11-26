@@ -6,6 +6,8 @@ from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 
 from fastlib.entity.group import Group
+from fastlib.entity.participant import Participant
+from fastlib.entity.recruit import Recruit
 from fastlib.entity.user import User
 from tests.view.schema.group import (
     GroupCommentPostResponseSchema,
@@ -161,14 +163,33 @@ def test_post_task(Session):
         session.commit()
 
 
-def test_group_recruit_list():
+def test_group_recruit_list(Session):
     from main import app
 
     client = TestClient(app)
-    res = client.get("/groups/recruits")
+    admin = client.post(
+        "/user/register", json={"id": "test@com", "pw": "test", "nickname": "test", "region": "seoul"}
+    ).json()["data"]
+    group = client.post(
+        "/group/register", json={"name": "test", "description": "test"}, cookies={"session_id": admin["id"]}
+    ).json()["data"]
+    # notice = client.post(f"/group/{group['id']}/recruit", json={"title": "test", "description": "test"},
+    #                      cookies={"session_id": admin["id"]})
+    res = client.get("/groups/recruits", cookies={"session_id": admin["id"]})
     assert res.status_code == 200
     body = res.json()["data"]
     assert GroupRecruitListResponseSchema().validate(body) == {}
+    # assert len(body["recruits"]) > 0
+
+    with Session() as session:
+        g = session.query(Group).filter_by(id=group["id"]).first()
+        for p in g.participants:
+            session.delete(p)
+        session.commit()
+        a = session.query(User).filter_by(id=admin["id"]).first()
+        session.delete(g)
+        session.delete(a)
+        session.commit()
 
 
 def test_group_recruit_search():
@@ -276,7 +297,6 @@ def test_group_notice_post(Session):
     assert res.status_code == 200
     body = res.json()["data"]
     assert GroupNoticePostResponseSchema().validate(body) == {}
-
     with Session() as session:
         user = session.query(User).filter_by(id=user["id"]).first()
         group = session.query(Group).filter_by(id=group["id"]).first()

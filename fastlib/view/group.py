@@ -1,11 +1,17 @@
 from typing import Annotated, Union
 
-from fastapi import APIRouter, Cookie
+from fastapi import APIRouter, Cookie, HTTPException
 from sqlalchemy.orm import sessionmaker
 
 from fastlib.business.comment import CommentBusiness
 from fastlib.business.group import GroupBusiness
-from fastlib.business.model.group import GroupParticipateResponseDto, GroupPostTaskRequestDto, GroupPostTaskResponseDto
+from fastlib.business.model.group import (
+    GroupParticipateResponseDto,
+    GroupPostTaskRequestDto,
+    GroupPostTaskResponseDto,
+    GroupRecruitListItemResponseDto,
+    GroupRecruitListResponseDto,
+)
 from fastlib.business.participant import ParticipantBusiness
 from fastlib.business.task import TaskBusiness
 from fastlib.resource import get_engine
@@ -33,8 +39,6 @@ from fastlib.view.model.group import (
     GroupPostRecruitRequestDto,
     GroupPostRecruitResponseDto,
     GroupRecruitDetailResponseDto,
-    GroupRecruitListItemResponseDto,
-    GroupRecruitListResponseDto,
     GroupRegisterRequestDto,
     GroupRegisterResponseDto,
     GroupTaskCompleteAdminRequestDto,
@@ -98,7 +102,6 @@ def post_recruit(
     return ApiResponse.ok(res)
 
 
-# TODO : 지금
 @router.post("/group/{room_id}/task")
 def post_task(
     room_id: int, req: GroupPostTaskRequestDto, session_id: Annotated[Union[str, None], Cookie()] = None
@@ -107,18 +110,12 @@ def post_task(
     return ApiResponse.ok(res)
 
 
-# TODO :
 @router.get("/groups/recruits")
-def get_recruits() -> ApiResponse[GroupRecruitListResponseDto]:
-    return ApiResponse.ok(
-        GroupRecruitListResponseDto(
-            recruits=[
-                GroupRecruitListItemResponseDto(id=1, title="test", description="test", room_name="test"),
-                GroupRecruitListItemResponseDto(id=1, title="test", description="test", room_name="test"),
-                GroupRecruitListItemResponseDto(id=1, title="test", description="test", room_name="test"),
-            ]
-        )
-    )
+def get_recruits(session_id: Annotated[Union[str, None], Cookie()] = None) -> ApiResponse[GroupRecruitListResponseDto]:
+    if not session_id:
+        raise HTTPException(status_code=403, detail="로그인한 사용자만 확인할 수 있습니다.")
+    res = group_business.get_recruits()
+    return ApiResponse.ok(res)
 
 
 # TODO :
