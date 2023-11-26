@@ -11,3 +11,5 @@ class Group(Base):
     description = Column(TEXT)
     max_people = Column(Integer)
     participants = relationship("Participant", back_populates="group")
+
+    recruit = relationship("Recruit", back_populates="group")

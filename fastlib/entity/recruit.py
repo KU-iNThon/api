@@ -11,4 +11,4 @@ class Recruit(Base):
     description = Column(TEXT)
     tags = Column(TEXT)
 
-    group = relationship("Group")
+    group = relationship("Group", back_populates="recruit")

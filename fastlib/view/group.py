@@ -69,6 +69,7 @@ def participate(room_id: int) -> ApiResponse[GroupParticipateResponseDto]:
     return ApiResponse.ok(GroupParticipateResponseDto(id=1))
 
 
+# TODO : Recruit
 @router.post("/group/{group_id}/recruit")
 def post_recruit(group_id: int, req: GroupPostRecruitRequestDto) -> ApiResponse[GroupPostRecruitResponseDto]:
     return ApiResponse.ok(GroupPostRecruitResponseDto(id=1))
