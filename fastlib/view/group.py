@@ -10,6 +10,8 @@ from fastlib.service.group import GroupService
 from fastlib.service.participant import ParticipantService
 from fastlib.service.recruit import RecruitService
 from fastlib.service.user import UserService
+from fastlib.service.task import TaskService
+from fastlib.service.comment import CommentService
 from fastlib.view.model.api import ApiResponse
 from fastlib.view.model.group import (
     GroupAdminResponseDto,
@@ -48,6 +50,8 @@ participant_service = ParticipantService(engine=engine)
 group_service = GroupService(engine=engine)
 user_service = UserService(engine=engine)
 recruit_service = RecruitService(engine=engine)
+taks_service = TaskService(engine=engine)
+comment_service = TaskService(engine=engine)
 
 group_business = GroupBusiness(
     session=sessionmaker(bind=engine),
@@ -55,6 +59,8 @@ group_business = GroupBusiness(
     participant_service=participant_service,
     group_service=group_service,
     recruit_service=recruit_service,
+    task_service=task_service,
+    comment_service=comment_service,
 )
 Base.metadata.create_all(bind=engine)
 
