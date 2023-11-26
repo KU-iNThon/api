@@ -1,13 +1,29 @@
 version: '3'
 services:
+  api:
+    container_name: ku-api
+    build:
+      context: .
+    ports:
+      - "5555:7777"
+    command:
+#      uvicorn --port=7777 main:app
+      sleep 3600
+    environment:
+      - DB_HOST=mysql
+      - DB_NAME=ku
+      - DB_USER=root
+      - DB_PASS=1234
+    depends_on:
+      - mysql
   mysql:
     image: mysql:8.0
     container_name: mysql
-    ports:
-      - 3306:3306 # HOST:CONTAINER
     environment:
       MYSQL_ROOT_PASSWORD: 1234
       MYSQL_DATABASE: ku
     command:
       - --character-set-server=utf8mb4
       - --collation-server=utf8mb4_unicode_ci
+    volumes:
+      - ./mysql/my.cnf:/etc/mysql/my.cnf
