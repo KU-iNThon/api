@@ -3,7 +3,6 @@ from sqlalchemy.orm import Session
 
 from fastlib.entity.comment import Comment
 
-
 class CommentService:
     def __init__(self, engine: Engine):
         self.__engine = engine

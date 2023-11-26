@@ -11,7 +11,6 @@ from fastlib.service.user import UserService
 def engine():
     return create_engine("mysql+pymysql://root:1234@127.0.0.1:3306/ku", echo=True)
 
-
 @pytest.fixture
 def session(engine):
     return sessionmaker(bind=engine)()
