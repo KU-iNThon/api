@@ -5,6 +5,7 @@ from sqlalchemy.orm import sessionmaker
 from fastlib.business.model.user import UserLoginResponseDto, UserRegisterRequestDto, UserRegisterResponseDto
 from fastlib.business.user import UserBusiness
 from fastlib.resource import get_engine
+from fastlib.service.task import TaskService
 from fastlib.service.user import UserService
 from fastlib.view.model.api import ApiResponse
 from fastlib.view.model.user import (
@@ -18,7 +19,8 @@ router = APIRouter()
 
 engine = get_engine()
 user_service = UserService(engine=engine)
-user_business = UserBusiness(session=sessionmaker(bind=engine), user_service=user_service)
+task_service = TaskService(engine=engine)
+user_business = UserBusiness(session=sessionmaker(bind=engine), user_service=user_service, task_service=task_service)
 
 
 @router.get("/user/login")

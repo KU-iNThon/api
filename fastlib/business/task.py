@@ -2,7 +2,7 @@ from sqlalchemy.orm import sessionmaker
 
 from fastlib.entity.task import Task
 from fastlib.service.task import TaskService
-from fastlib.business.model import GroupPostTaskRequestDto, GroupPostTaskResponseDto
+from fastlib.business.model.task import GroupPostTaskRequestDto, GroupPostTaskResponseDto
 
 
 class TaskBusiness:

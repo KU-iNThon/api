@@ -4,6 +4,9 @@ from fastapi import APIRouter, Cookie
 from sqlalchemy.orm import sessionmaker
 
 from fastlib.business.group import GroupBusiness
+from fastlib.business.task import TaskBusiness
+from fastlib.business.participant import ParticipantBusiness
+from fastlib.business.comment import CommentBusiness
 from fastlib.entity.base import Base
 from fastlib.resource import get_engine
 from fastlib.service.group import GroupService
@@ -12,6 +15,7 @@ from fastlib.service.recruit import RecruitService
 from fastlib.service.user import UserService
 from fastlib.service.task import TaskService
 from fastlib.service.comment import CommentService
+from fastlib.service.participant import ParticipantService
 from fastlib.view.model.api import ApiResponse
 from fastlib.view.model.group import (
     GroupAdminResponseDto,
@@ -51,7 +55,13 @@ group_service = GroupService(engine=engine)
 user_service = UserService(engine=engine)
 recruit_service = RecruitService(engine=engine)
 task_service = TaskService(engine=engine)
-comment_service = TaskService(engine=engine)
+comment_service = CommentService(engine=engine)
+participant_service = ParticipantService(engine=engine)
+
+task_business = TaskBusiness(session=sessionmaker(bind=engine), task_service=task_service)
+participant_business = ParticipantBusiness(session=sessionmaker(bind=engine))
+
+comment_business = CommentBusiness(session=sessionmaker(bind=engine), comment_service=comment_service)
 
 group_business = GroupBusiness(
     session=sessionmaker(bind=engine),
@@ -59,8 +69,6 @@ group_business = GroupBusiness(
     participant_service=participant_service,
     group_service=group_service,
     recruit_service=recruit_service,
-    task_service=task_service,
-    comment_service=comment_service,
 )
 Base.metadata.create_all(bind=engine)
 

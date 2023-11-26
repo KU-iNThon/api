@@ -1,24 +1,16 @@
-from sqlachemy.orm import sessionmaker
+from sqlalchemy.orm import sessionmaker
+from fastapi import HTTPException
 
-from fastlib.service.group import GroupService
-from fastlib.business.model.participant import GrouptParticipantResponseDto
+from fastlib.service.participant import ParticipantService
+from fastlib.business.model.participant import GroupParticipantResponseDto
 from fastlib.entity.participant import Participant
 
 
 class ParticipantBusiness:
-    def __int__(
-        self,
-        session: sessionmaker,
-        user_service: UserService,
-        group_service: GroupService,
-        participant_service: ParticipantService,
-    ):
+    def __int__(self, session: sessionmaker):
         self.__session = session
-        self.__user_service = user_service
-        self.__group_service = group_service
-        self.__participant_service = participant_service
 
-    def participate(self, user_id: str, group_id: int) -> GroupParticipantResponsedto:
+    def participate(self, user_id: str, group_id: int) -> GroupParticipantResponseDto:
         with self.__session() as session:
             entity = Participant(user_id=user_id, group_id=group_id, role="user")
             result = session.query(Participant).filter_by(id=user_id, group_id=group_id).first()
