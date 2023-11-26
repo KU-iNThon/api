@@ -10,9 +10,11 @@ from fastlib.business.model.group import (
     GroupRegisterResponseDto,
 )
 from fastlib.entity.group import Group
+from fastlib.entity.notice import Notice
 from fastlib.entity.participant import Participant
 from fastlib.entity.recruit import Recruit
 from fastlib.service.group import GroupService
+from fastlib.service.notice import NoticeService
 from fastlib.service.participant import ParticipantService
 from fastlib.service.recruit import RecruitService
 from fastlib.service.user import UserService
@@ -26,12 +28,14 @@ class GroupBusiness:
         group_service: GroupService,
         participant_service: ParticipantService,
         recruit_service: RecruitService,
+        notice_service: NoticeService,
     ):
         self.__session = session
         self.__user_service = user_service
         self.__group_service = group_service
         self.__participant_service = participant_service
         self.__recruit_service = recruit_service
+        self.__notice_service = notice_service
 
     def create(self, user_id: str, req: GroupRegisterRequestDto) -> GroupRegisterResponseDto:
         with self.__session() as session:
@@ -68,3 +72,15 @@ class GroupBusiness:
         with self.__session() as session:
             group = self.__group_service.find(session=session, id_=group_id)
             user = self.__user_service.find(session=session, id_=user_id)
+            authorized = False
+            for p in group.participants:
+                if p.user_id == user.id:
+                    authorized = True
+                    break
+            if not authorized:
+                raise HTTPException(status_code=403, detail="공지를 등록할 권한이 없습니다.")
+            entity = Notice(group=group, user=user, title=req.title, description=req.description)
+            entity = self.__notice_service.save(session=session, entity=entity)
+            session.commit()
+            res = GroupNoticePostResponseDto(id=entity.id)
+        return res
