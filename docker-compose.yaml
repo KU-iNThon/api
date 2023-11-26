@@ -6,8 +6,8 @@ services:
       context: .
     ports:
       - "5555:7777"
-    command:
-      uvicorn --port=7777 --host=0.0.0.0 main:app
+    entrypoint:
+      sleep 36000
     environment:
       - DB_HOST=mysql
       - DB_NAME=ku
