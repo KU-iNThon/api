@@ -7,7 +7,7 @@ from fastlib.entity.base import Base
 
 
 class Comment(Base):
-    __tablename__ = "commnents"
+    __tablename__ = "comments"
     id = Column(Integer, primary_key=True, index=True)
     user_id = Column(VARCHAR(20), ForeignKey("users.id"), primary_key=True)
     group_id = Column(Integer, ForeignKey("groups.id"), primary_key=True)

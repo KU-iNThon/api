@@ -13,6 +13,6 @@ class TaskBusiness:
     def create(self, req: GroupPostTaskRequestDto) -> GroupPostTaskResponseDto:
         with self.__session() as session:
             task = Task(title=req.title, start_date=req.start_date, end_date=req.end_date)
-            self.__task_service.save(session, entity)
-            res = GroupPostTaskRespsonseDto(id=task.id)
+            self.__task_service.save(session, task)
+            res = GroupPostTaskResponseDto(id=task.id)
             return res
