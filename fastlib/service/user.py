@@ -25,3 +25,9 @@ class UserService:
             res = session.query(User).filter_by(id=entity.id).first()
             session.commit()
             return res
+
+    def find(self, session: Session, id_: str) -> User:
+        if user := session.query(User).filter_by(id=id_).first():
+            return user
+        else:
+            raise HTTPException(status_code=404, detail="사용자를 찾을 수 없습니다.")

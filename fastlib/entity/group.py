@@ -1,4 +1,5 @@
 from sqlalchemy import Column, Integer, TEXT, VARCHAR
+from sqlalchemy.orm import relationship
 
 from fastlib.entity.base import Base
 
@@ -9,3 +10,4 @@ class Group(Base):
     name = Column(VARCHAR(20))
     description = Column(TEXT)
     max_people = Column(Integer)
+    participants = relationship("Participant", back_populates="group")

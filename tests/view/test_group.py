@@ -1,18 +1,18 @@
 import os
 
+import pytest
 from fastapi.testclient import TestClient
+from sqlalchemy import create_engine
+from sqlalchemy.orm import sessionmaker
 
+from fastlib.entity.group import Group
+from fastlib.entity.user import User
 from tests.view.schema.group import (
-
-    GroupPostRecruitResponseSchema,
-    GroupRegisterResponseSchema,
-    GroupParticipateResponseSchema,
-    GroupPostTaskResponseSchema,
-
     GroupCommentPostResponseSchema,
     GroupDetailResponseSchema,
     GroupNoticeDetailResponseSchema,
     GroupNoticePostResponseSchema,
+    GroupNotifyResponseSchema,
     GroupParticipateResponseSchema,
     GroupPostRecruitResponseSchema,
     GroupPostTaskResponseSchema,
@@ -21,9 +21,6 @@ from tests.view.schema.group import (
     GroupRegisterResponseSchema,
     GroupTaskCompletedResponseSchema,
     GroupTaskDetailResponseSchema,
-
-    GroupNotifyResponseSchema,
-
 )
 
 
@@ -31,17 +28,39 @@ while "tests" not in os.listdir():
     os.chdir("..")
 
 
-def test_group_register():
+@pytest.fixture()
+def engine():
+    return create_engine("mysql+pymysql://root:1234@127.0.0.1:3306/ku", echo=True)
+
+
+@pytest.fixture()
+def Session(engine):
+    return sessionmaker(bind=engine)
+
+
+def test_group_register(Session):
     from main import app
 
     # given
     client = TestClient(app)
     # when
-    res = client.post("/group/register", json={"name": "test", "description": "test"})
+    client.post("/user/register", json={"id": "test@com", "pw": "test", "nickname": "test", "region": "seoul"})
+    res = client.post(
+        "/group/register", json={"name": "test", "description": "test"}, cookies={"session_id": "test@com"}
+    )
     # then
     assert res.status_code == 200
     body = res.json()["data"]
     assert GroupRegisterResponseSchema().validate(body) == {}
+
+    with Session() as session:
+        g = session.query(Group).filter_by(id=body["id"]).first()
+        for p in g.participants:
+            session.delete(p)
+        session.delete(g)
+        u = session.query(User).filter_by(id="test@com").first()
+        session.delete(u)
+        session.commit()
 
 
 def test_group_post_recruit():
@@ -130,7 +149,6 @@ def test_group_task_detail():
     assert GroupTaskDetailResponseSchema().validate(body) == {}
 
 
-
 def test_group_task_notify():
     from main import app
 
@@ -139,6 +157,7 @@ def test_group_task_notify():
     assert res.status_code == 200
     body = res.json()["data"]
     assert GroupNotifyResponseSchema().validate(body) == {}
+
 
 def test_group_task_complete_user():
     from main import app

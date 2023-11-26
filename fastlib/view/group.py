@@ -1,9 +1,14 @@
-from fastapi import APIRouter
-from sqlalchemy import create_engine
+from typing import Annotated, Union
 
+from fastapi import APIRouter, Cookie
+from sqlalchemy.orm import sessionmaker
+
+from fastlib.business.group import GroupBusiness
 from fastlib.entity.base import Base
 from fastlib.resource import get_engine
+from fastlib.service.group import GroupService
 from fastlib.service.participant import ParticipantService
+from fastlib.service.user import UserService
 from fastlib.view.model.api import ApiResponse
 from fastlib.view.model.group import (
     GroupAdminResponseDto,
@@ -39,12 +44,24 @@ router = APIRouter()
 
 engine = get_engine()
 participant_service = ParticipantService(engine=engine)
+group_service = GroupService(engine=engine)
+user_service = UserService(engine=engine)
+
+group_business = GroupBusiness(
+    session=sessionmaker(bind=engine),
+    user_service=user_service,
+    participant_service=participant_service,
+    group_service=group_service,
+)
 Base.metadata.create_all(bind=engine)
 
 
 @router.post("/group/register")
-def register(req: GroupRegisterRequestDto) -> ApiResponse[GroupRegisterResponseDto]:
-    return ApiResponse.ok(GroupRegisterResponseDto(id=1))
+def register(
+    req: GroupRegisterRequestDto, session_id: Annotated[Union[str, None], Cookie()] = None
+) -> ApiResponse[GroupRegisterResponseDto]:
+    res = group_business.create(req=req, user_id=session_id)
+    return ApiResponse.ok(GroupRegisterResponseDto(id=res.id))
 
 
 @router.post("/group/{room_id}/participate")
