@@ -216,14 +216,38 @@ def test_group_notice_comment_post():
     assert notice_id == body["id"]
 
 
-# def test_group_notice_post():
-#     from main import app
-#
-#     client = TestClient(app)
-#     res = client.post("/group/1/notice", json={"title": "title", "description": "description"})
-#     assert res.status_code == 200
-#     body = res.json()["data"]
-#     assert GroupNoticePostResponseSchema().validate(body) == {}
+def test_group_notice_post(Session):
+    from main import app
+
+    client = TestClient(app)
+    user = client.post(
+        "/user/register", json={"id": "test@com", "pw": "test", "nickname": "test", "region": "seoul"}
+    ).json()["data"]
+    group = client.post(
+        "/group/register", json={"name": "test", "description": "test"}, cookies={"session_id": "test@com"}
+    ).json()["data"]
+
+    res = client.post(
+        f"/group/{group['id']}/notice",
+        json={"title": "title", "description": "description"},
+        cookies={"session_id": user["id"]},
+    )
+    assert res.status_code == 200
+    body = res.json()["data"]
+    assert GroupNoticePostResponseSchema().validate(body) == {}
+
+    with Session() as session:
+        user = session.query(User).filter_by(id=user["id"]).first()
+        group = session.query(Group).filter_by(id=group["id"]).first()
+        for n in group.notices:
+            session.delete(n)
+        session.commit()
+        for p in group.participants:
+            session.delete(p)
+        session.commit()
+        session.delete(group)
+        session.delete(user)
+        session.commit()
 
 
 def test_group_task_complete_admin():

@@ -7,6 +7,7 @@ from fastlib.business.group import GroupBusiness
 from fastlib.entity.base import Base
 from fastlib.resource import get_engine
 from fastlib.service.group import GroupService
+from fastlib.service.notice import NoticeService
 from fastlib.service.participant import ParticipantService
 from fastlib.service.recruit import RecruitService
 from fastlib.service.user import UserService
@@ -48,6 +49,7 @@ participant_service = ParticipantService(engine=engine)
 group_service = GroupService(engine=engine)
 user_service = UserService(engine=engine)
 recruit_service = RecruitService(engine=engine)
+notice_service = NoticeService(engine=engine)
 
 group_business = GroupBusiness(
     session=sessionmaker(bind=engine),
@@ -55,6 +57,7 @@ group_business = GroupBusiness(
     participant_service=participant_service,
     group_service=group_service,
     recruit_service=recruit_service,
+    notice_service=notice_service,
 )
 Base.metadata.create_all(bind=engine)
 
