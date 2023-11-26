@@ -2,6 +2,8 @@ from fastapi import HTTPException
 from sqlalchemy.orm import sessionmaker
 
 from fastlib.business.model.group import (
+    GroupNoticePostRequestDto,
+    GroupNoticePostResponseDto,
     GroupPostRecruitRequestDto,
     GroupPostRecruitResponseDto,
     GroupRegisterRequestDto,
@@ -61,3 +63,8 @@ class GroupBusiness:
             session.commit()
             res = GroupPostRecruitResponseDto(id=entity.id)
         return res
+
+    def create_notice(self, group_id: int, user_id: str, req: GroupNoticePostRequestDto) -> GroupNoticePostResponseDto:
+        with self.__session() as session:
+            group = self.__group_service.find(session=session, id_=group_id)
+            user = self.__user_service.find(session=session, id_=user_id)

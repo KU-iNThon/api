@@ -193,9 +193,13 @@ def comment_task(
     return ApiResponse.ok(GroupCommentPostResponseDto(id=task_id))
 
 
+# TODO :
 @router.post("/group/{group_id}/notice")
-def create_notice(group_id: int, req: GroupNoticePostRequestDto) -> ApiResponse[GroupNoticePostResponseDto]:
-    return ApiResponse.ok(GroupNoticePostResponseDto(id=1))
+def create_notice(
+    group_id: int, req: GroupNoticePostRequestDto, session_id: Annotated[Union[str, None], Cookie()] = None
+) -> ApiResponse[GroupNoticePostResponseDto]:
+    res = group_business.create_notice(group_id=group_id, user_id=session_id, req=req)
+    return ApiResponse.ok(res)
 
 
 @router.post("/group/{group_id}/task/{task_id}/complete/admin")

@@ -20,3 +20,12 @@ class GroupPostRecruitRequestDto(BaseModel):
 
 class GroupPostRecruitResponseDto(BaseModel):
     id: int
+
+
+class GroupNoticePostRequestDto(BaseModel):
+    title: str
+    description: str
+
+
+class GroupNoticePostResponseDto(BaseModel):
+    id: int

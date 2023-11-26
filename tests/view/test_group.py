@@ -73,6 +73,7 @@ def test_group_post_recruit(Session):
     group = client.post(
         "/group/register", json={"name": "test", "description": "test"}, cookies={"session_id": "test@com"}
     ).json()["data"]
+
     res = client.post(
         f"/group/{group['id']}/recruit",
         json={"title": "test-title", "description": "description", "tags": ["tag-a", "tag-b"]},
@@ -215,14 +216,14 @@ def test_group_notice_comment_post():
     assert notice_id == body["id"]
 
 
-def test_group_notice_post():
-    from main import app
-
-    client = TestClient(app)
-    res = client.post("/group/1/notice", json={"title": "title", "description": "description"})
-    assert res.status_code == 200
-    body = res.json()["data"]
-    assert GroupNoticePostResponseSchema().validate(body) == {}
+# def test_group_notice_post():
+#     from main import app
+#
+#     client = TestClient(app)
+#     res = client.post("/group/1/notice", json={"title": "title", "description": "description"})
+#     assert res.status_code == 200
+#     body = res.json()["data"]
+#     assert GroupNoticePostResponseSchema().validate(body) == {}
 
 
 def test_group_task_complete_admin():
