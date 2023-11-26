@@ -7,6 +7,7 @@ from fastlib.business.group import GroupBusiness
 from fastlib.entity.base import Base
 from fastlib.resource import get_engine
 from fastlib.service.group import GroupService
+from fastlib.service.notice import NoticeService
 from fastlib.service.participant import ParticipantService
 from fastlib.service.recruit import RecruitService
 from fastlib.service.user import UserService
@@ -50,8 +51,11 @@ participant_service = ParticipantService(engine=engine)
 group_service = GroupService(engine=engine)
 user_service = UserService(engine=engine)
 recruit_service = RecruitService(engine=engine)
+
 task_service = TaskService(engine=engine)
 comment_service = TaskService(engine=engine)
+notice_service = NoticeService(engine=engine)
+
 
 group_business = GroupBusiness(
     session=sessionmaker(bind=engine),
@@ -59,8 +63,12 @@ group_business = GroupBusiness(
     participant_service=participant_service,
     group_service=group_service,
     recruit_service=recruit_service,
+
     task_service=task_service,
     comment_service=comment_service,
+
+    notice_service=notice_service,
+
 )
 Base.metadata.create_all(bind=engine)
 
@@ -73,6 +81,7 @@ def register(
     return ApiResponse.ok(GroupRegisterResponseDto(id=res.id))
 
 
+# TODO :
 @router.post("/group/{room_id}/participate")
 def participate(room_id: int) -> ApiResponse[GroupParticipateResponseDto]:
     return ApiResponse.ok(GroupParticipateResponseDto(id=1))
@@ -86,11 +95,15 @@ def post_recruit(
     return ApiResponse.ok(GroupPostRecruitResponseDto(id=res.id))
 
 
+# TODO :
+
+
 @router.post("/group/{room_id}/task")
 def post_task(room_id: int, req: GroupPostTaskRequestDto) -> ApiResponse[GroupPostTaskResponseDto]:
     return ApiResponse.ok(GroupPostTaskResponseDto(id=1))
 
 
+# TODO :
 @router.get("/groups/recruits")
 def get_recruits() -> ApiResponse[GroupRecruitListResponseDto]:
     return ApiResponse.ok(
@@ -104,6 +117,7 @@ def get_recruits() -> ApiResponse[GroupRecruitListResponseDto]:
     )
 
 
+# TODO :
 @router.get("/groups/recruits/search")
 def get_recruits(query: str) -> ApiResponse[GroupRecruitListResponseDto]:
     return ApiResponse.ok(
@@ -117,6 +131,7 @@ def get_recruits(query: str) -> ApiResponse[GroupRecruitListResponseDto]:
     )
 
 
+# TODO :
 @router.get("/group/{group_id}/recruit")
 def get_recruit_detail(group_id: int) -> ApiResponse[GroupRecruitDetailResponseDto]:
     return ApiResponse.ok(
@@ -133,6 +148,7 @@ def get_recruit_detail(group_id: int) -> ApiResponse[GroupRecruitDetailResponseD
     )
 
 
+# TODO :
 @router.get("/group/{group_id}/notice/{notice_id}")
 def get_recruit_notice_detail(group_id: int, notice_id: int) -> ApiResponse[GroupNoticeDetailResponseDto]:
     return ApiResponse.ok(
@@ -147,6 +163,9 @@ def get_recruit_notice_detail(group_id: int, notice_id: int) -> ApiResponse[Grou
             ],
         )
     )
+
+
+# TODO :
 
 
 @router.get("/group/{group_id}/task/{task_id}")
@@ -168,6 +187,7 @@ def get_recruit_notice_detail(group_id: int, task_id: int) -> ApiResponse[GroupT
     )
 
 
+# TODO :
 @router.get("/group/{group_id}/task/{task_id}/notify")
 def get_notify(group_id: int, task_id: int) -> ApiResponse[GroupNotifyResponseDto]:
     return ApiResponse.ok(
@@ -180,11 +200,13 @@ def get_notify(group_id: int, task_id: int) -> ApiResponse[GroupNotifyResponseDt
     )
 
 
+# TODO :
 @router.post("/group/{group_id}/task/{task_id}/complete/user")
 def complete_task_user(group_id: int, task_id: int) -> ApiResponse[GroupTaskCompleteResponseDto]:
     return ApiResponse.ok(GroupTaskCompleteResponseDto(id=task_id))
 
 
+# TODO :
 @router.post("/group/{group_id}/notice/{notice_id}/comment")
 def comment_notice(
     group_id: int, notice_id: int, req: GroupCommentPostRequestDto
@@ -192,6 +214,7 @@ def comment_notice(
     return ApiResponse.ok(GroupCommentPostResponseDto(id=notice_id))
 
 
+# TODO :
 @router.post("/group/{group_id}/task/{task_id}/comment")
 def comment_task(
     group_id: int, task_id: int, req: GroupCommentPostRequestDto
@@ -200,10 +223,14 @@ def comment_task(
 
 
 @router.post("/group/{group_id}/notice")
-def create_notice(group_id: int, req: GroupNoticePostRequestDto) -> ApiResponse[GroupNoticePostResponseDto]:
-    return ApiResponse.ok(GroupNoticePostResponseDto(id=1))
+def create_notice(
+    group_id: int, req: GroupNoticePostRequestDto, session_id: Annotated[Union[str, None], Cookie()] = None
+) -> ApiResponse[GroupNoticePostResponseDto]:
+    res = group_business.create_notice(group_id=group_id, user_id=session_id, req=req)
+    return ApiResponse.ok(res)
 
 
+# TODO :
 @router.post("/group/{group_id}/task/{task_id}/complete/admin")
 def complete_task_user(
     group_id: int, task_id: int, req: GroupTaskCompleteAdminRequestDto
@@ -211,6 +238,7 @@ def complete_task_user(
     return ApiResponse.ok(GroupTaskCompleteResponseDto(id=task_id))
 
 
+# TODO :
 @router.get("/group/{group_id}")
 def get_group_detail(group_id: int) -> ApiResponse[GroupDetailResponseDto]:
     res = GroupDetailResponseDto(
