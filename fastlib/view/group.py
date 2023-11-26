@@ -8,6 +8,7 @@ from fastlib.entity.base import Base
 from fastlib.resource import get_engine
 from fastlib.service.group import GroupService
 from fastlib.service.participant import ParticipantService
+from fastlib.service.recruit import RecruitService
 from fastlib.service.user import UserService
 from fastlib.view.model.api import ApiResponse
 from fastlib.view.model.group import (
@@ -46,12 +47,14 @@ engine = get_engine()
 participant_service = ParticipantService(engine=engine)
 group_service = GroupService(engine=engine)
 user_service = UserService(engine=engine)
+recruit_service = RecruitService(engine=engine)
 
 group_business = GroupBusiness(
     session=sessionmaker(bind=engine),
     user_service=user_service,
     participant_service=participant_service,
     group_service=group_service,
+    recruit_service=recruit_service,
 )
 Base.metadata.create_all(bind=engine)
 
@@ -70,8 +73,11 @@ def participate(room_id: int) -> ApiResponse[GroupParticipateResponseDto]:
 
 
 @router.post("/group/{group_id}/recruit")
-def post_recruit(group_id: int, req: GroupPostRecruitRequestDto) -> ApiResponse[GroupPostRecruitResponseDto]:
-    return ApiResponse.ok(GroupPostRecruitResponseDto(id=1))
+def post_recruit(
+    group_id: int, req: GroupPostRecruitRequestDto, session_id: Annotated[Union[str, None], Cookie()] = None
+) -> ApiResponse[GroupPostRecruitResponseDto]:
+    res = group_business.create_recruit(user_id=session_id, group_id=group_id, req=req)
+    return ApiResponse.ok(GroupPostRecruitResponseDto(id=res.id))
 
 
 @router.post("/group/{room_id}/task")

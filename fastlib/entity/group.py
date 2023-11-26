@@ -1,7 +1,8 @@
 from sqlalchemy import Column, Integer, TEXT, VARCHAR
-from sqlalchemy.orm import relationship
+from sqlalchemy.orm import Mapped, relationship
 
 from fastlib.entity.base import Base
+from fastlib.entity.recruit import Recruit
 
 
 class Group(Base):
@@ -11,3 +12,5 @@ class Group(Base):
     description = Column(TEXT)
     max_people = Column(Integer)
     participants = relationship("Participant", back_populates="group")
+
+    recruit: Mapped["Recruit"] = relationship("Recruit", back_populates="group")
