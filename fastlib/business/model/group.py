@@ -29,3 +29,7 @@ class GroupNoticePostRequestDto(BaseModel):
 
 class GroupNoticePostResponseDto(BaseModel):
     id: int
+
+
+class GroupParticipateResponseDto(BaseModel):
+    id: int
