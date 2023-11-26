@@ -7,8 +7,7 @@ services:
     ports:
       - "5555:7777"
     command:
-#      uvicorn --port=7777 main:app
-      sleep 3600
+      uvicorn --port=7777 main:app
     environment:
       - DB_HOST=mysql
       - DB_NAME=ku
