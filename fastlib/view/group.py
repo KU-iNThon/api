@@ -2,6 +2,7 @@ from fastapi import APIRouter
 from sqlalchemy import create_engine
 
 from fastlib.entity.base import Base
+from fastlib.resource import get_engine
 from fastlib.service.participant import ParticipantService
 from fastlib.view.model.api import ApiResponse
 from fastlib.view.model.group import (
@@ -36,7 +37,7 @@ from fastlib.view.model.group import (
 
 router = APIRouter()
 
-engine = create_engine("mysql+pymysql://root:1234@127.0.0.1:3306/ku", echo=True)
+engine = get_engine()
 participant_service = ParticipantService(engine=engine)
 Base.metadata.create_all(bind=engine)
 
