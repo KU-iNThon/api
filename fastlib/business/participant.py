@@ -1,4 +1,3 @@
-
 from sqlalchemy.orm import sessionmaker
 from fastapi import HTTPException
 
@@ -15,7 +14,7 @@ from fastlib.view.model.group import GroupParticipantResponseDto
 
 
 class ParticipantBusiness:
-    def __int__(self, session: sessionmaker):
+    def __init__(self, session: sessionmaker):
         self.__session = session
 
     def participate(self, user_id: str, group_id: int) -> GroupParticipantResponseDto:

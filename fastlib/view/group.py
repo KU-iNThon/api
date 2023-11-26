@@ -3,22 +3,19 @@ from typing import Annotated, Union
 from fastapi import APIRouter, Cookie
 from sqlalchemy.orm import sessionmaker
 
-from fastlib.business.group import GroupBusiness
-from fastlib.business.task import TaskBusiness
-from fastlib.business.participant import ParticipantBusiness
 from fastlib.business.comment import CommentBusiness
+from fastlib.business.group import GroupBusiness
+from fastlib.business.participant import ParticipantBusiness
+from fastlib.business.task import TaskBusiness
 from fastlib.entity.base import Base
 from fastlib.resource import get_engine
+from fastlib.service.comment import CommentService
 from fastlib.service.group import GroupService
 from fastlib.service.notice import NoticeService
 from fastlib.service.participant import ParticipantService
 from fastlib.service.recruit import RecruitService
-from fastlib.service.user import UserService
 from fastlib.service.task import TaskService
-from fastlib.service.comment import CommentService
-
-from fastlib.service.participant import ParticipantService
-
+from fastlib.service.user import UserService
 from fastlib.view.model.api import ApiResponse
 from fastlib.view.model.group import (
     GroupAdminResponseDto,
@@ -59,7 +56,6 @@ user_service = UserService(engine=engine)
 recruit_service = RecruitService(engine=engine)
 task_service = TaskService(engine=engine)
 comment_service = CommentService(engine=engine)
-participant_service = ParticipantService(engine=engine)
 
 task_business = TaskBusiness(session=sessionmaker(bind=engine), task_service=task_service)
 participant_business = ParticipantBusiness(session=sessionmaker(bind=engine))
@@ -70,21 +66,14 @@ task_service = TaskService(engine=engine)
 comment_service = TaskService(engine=engine)
 notice_service = NoticeService(engine=engine)
 
-
 group_business = GroupBusiness(
     session=sessionmaker(bind=engine),
     user_service=user_service,
     participant_service=participant_service,
     group_service=group_service,
     recruit_service=recruit_service,
-
-    task_service=task_service,
-    comment_service=comment_service,
-
     notice_service=notice_service,
-
 )
-Base.metadata.create_all(bind=engine)
 
 
 @router.post("/group/register")
