@@ -9,7 +9,6 @@ from fastlib.entity.recruit import Recruit
 class RecruitService:
     def __init__(self, engine: Engine):
         self.__engine = engine
-        Group.metadata.create_all(engine)
 
     def save(self, session: Session, entity: Recruit) -> Recruit:
         if session.query(Recruit).filter_by(group=entity.group).first():

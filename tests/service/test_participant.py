@@ -26,7 +26,7 @@ def test_participant(session, engine):
     user_service = UserService(engine=engine)
     group_service = GroupService(engine=engine)
     user = User(id="test@com", nickname="test", pw="test", region="test")
-    group = Group(name="test", description="test")
+    group = Group(name="test", description="test", max_people=3)
     user_service.register(session, user)
     group_service.save(session, group)
 

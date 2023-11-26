@@ -12,7 +12,7 @@ def engine():
     return create_engine("mysql+pymysql://root:1234@127.0.0.1:3306/ku", echo=True)
 
 
-@pytest.fixture()
+@pytest.fixture
 def session(engine):
     return sessionmaker(bind=engine)()
 
@@ -27,7 +27,7 @@ def test_login(session, engine):
 
 def test_register_ok(session, engine):
     service = UserService(engine=engine)
-    entity = User(nickname="test1", id="new10@com", pw="test-pw")
+    entity = User(nickname="test1", id="new10@com", pw="test-pw", region="test")
     res = service.register(session=session, entity=entity)
     # clean
     assert res.id == entity.id
@@ -37,8 +37,8 @@ def test_register_ok(session, engine):
 
 def test_register_duplicated(session, engine):
     service = UserService(engine=engine)
-    entity1 = User(nickname="test2", id="new3@com", pw="test-pw")
-    entity2 = User(nickname="test2", id="new3@com", pw="test-pw")
+    entity1 = User(nickname="test2", id="new3@com", pw="test-pw", region="test")
+    entity2 = User(nickname="test2", id="new3@com", pw="test-pw", region="test")
     res = service.register(session=session, entity=entity1)
     with pytest.raises(HTTPException) as e:
         service.register(session=session, entity=entity2)

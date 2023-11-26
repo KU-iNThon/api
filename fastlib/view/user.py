@@ -19,7 +19,7 @@ router = APIRouter()
 engine = get_engine()
 user_service = UserService(engine=engine)
 task_service = TaskService(engine=engine)
-user_business = UserBusiness(session=sessionmaker(bind=engine), user_service=user_service, task_service=task_service)
+user_business = UserBusiness(session=sessionmaker(bind=engine), user_service=user_service)
 
 
 @router.get("/user/login")

@@ -8,7 +8,6 @@ from fastlib.entity.user import User
 class UserService:
     def __init__(self, engine: Engine):
         self.__engine = engine
-        User.metadata.create_all(engine)
 
     def login(self, session: Session, entity: User) -> User:
         res = session.query(User).filter_by(id=entity.id).first()
