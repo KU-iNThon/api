@@ -63,16 +63,36 @@ def test_group_register(Session):
         session.commit()
 
 
-def test_group_post_recruit():
+def test_group_post_recruit(Session):
     from main import app
 
     client = TestClient(app)
+    user = client.post(
+        "/user/register", json={"id": "test@com", "pw": "test", "nickname": "test", "region": "seoul"}
+    ).json()["data"]
+    group = client.post(
+        "/group/register", json={"name": "test", "description": "test"}, cookies={"session_id": "test@com"}
+    ).json()["data"]
     res = client.post(
-        "/group/1/recruit", json={"title": "test-title", "description": "description", "tags": ["tag-a", "tag-b"]}
+        f"/group/{group['id']}/recruit",
+        json={"title": "test-title", "description": "description", "tags": ["tag-a", "tag-b"]},
+        cookies={"session_id": user["id"]},
     )
     assert res.status_code == 200
     body = res.json()["data"]
     assert GroupPostRecruitResponseSchema().validate(body) == {}
+
+    with Session() as session:
+        user = session.query(User).filter_by(id=user["id"]).first()
+        group = session.query(Group).filter_by(id=group["id"]).first()
+        session.delete(group.recruit)
+        session.commit()
+        for p in group.participants:
+            session.delete(p)
+        session.commit()
+        session.delete(group)
+        session.delete(user)
+        session.commit()
 
 
 def test_group_participate():
