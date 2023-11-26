@@ -7,6 +7,8 @@ from fastlib.business.model.group import (
     GroupParticipateResponseDto,
     GroupPostRecruitRequestDto,
     GroupPostRecruitResponseDto,
+    GroupPostTaskRequestDto,
+    GroupPostTaskResponseDto,
     GroupRegisterRequestDto,
     GroupRegisterResponseDto,
 )
@@ -14,10 +16,12 @@ from fastlib.entity.group import Group
 from fastlib.entity.notice import Notice
 from fastlib.entity.participant import Participant
 from fastlib.entity.recruit import Recruit
+from fastlib.entity.task import Task
 from fastlib.service.group import GroupService
 from fastlib.service.notice import NoticeService
 from fastlib.service.participant import ParticipantService
 from fastlib.service.recruit import RecruitService
+from fastlib.service.task import TaskService
 from fastlib.service.user import UserService
 
 
@@ -30,6 +34,7 @@ class GroupBusiness:
         participant_service: ParticipantService,
         recruit_service: RecruitService,
         notice_service: NoticeService,
+        task_service: TaskService,
     ):
         self.__session = session
         self.__user_service = user_service
@@ -37,6 +42,7 @@ class GroupBusiness:
         self.__participant_service = participant_service
         self.__recruit_service = recruit_service
         self.__notice_service = notice_service
+        self.__task_service = task_service
 
     def create(self, user_id: str, req: GroupRegisterRequestDto) -> GroupRegisterResponseDto:
         with self.__session() as session:
@@ -104,4 +110,17 @@ class GroupBusiness:
             self.__participant_service.save(session=session, entity=participant)
             session.commit()
             res = GroupParticipateResponseDto(id=participant.group_id)
+        return res
+
+    def create_task(self, user_id: str, room_id: int, req: GroupPostTaskRequestDto) -> GroupPostTaskResponseDto:
+        with self.__session() as session:
+            user = self.__user_service.find(session=session, id_=user_id)
+            group = self.__group_service.find(session=session, id_=room_id)
+            admin = next(filter(lambda p: p.role == "admin", group.participants), None)
+            if not admin or admin.user_id != user.id:
+                raise HTTPException(status_code=403, detail="활동은 관리자만 등록할 수 있습니다.")
+            task = Task(group=group, title=req.title, start_date=req.start_date, end_date=req.end_date)
+            task = self.__task_service.save(session=session, entity=task)
+            session.commit()
+            res = GroupPostTaskResponseDto(id=task.id)
         return res

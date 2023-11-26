@@ -127,18 +127,38 @@ def test_group_participate(Session):
         session.commit()
 
 
-def test_post_task():
+def test_post_task(Session):
     from main import app
 
     client = TestClient(app)
+    admin = client.post(
+        "/user/register", json={"id": "test@com", "pw": "test", "nickname": "test", "region": "seoul"}
+    ).json()["data"]
+    group = client.post(
+        "/group/register", json={"name": "test", "description": "test"}, cookies={"session_id": admin["id"]}
+    ).json()["data"]
     res = client.post(
-        "/group/1/task",
+        f"/group/{group['id']}/task",
         json={"title": "test_title", "start_date": "2022-12-12T00:00:00", "end_date": "2022-12-12T00:00:00"},
+        cookies={"session_id": admin["id"]},
     )
 
     assert res.status_code == 200
     body = res.json()["data"]
     assert GroupPostTaskResponseSchema().validate(body) == {}
+
+    with Session() as session:
+        a = session.query(User).filter_by(id=admin["id"]).first()
+        g = session.query(Group).filter_by(id=group["id"]).first()
+        for t in g.tasks:
+            session.delete(t)
+        session.commit()
+        for p in g.participants:
+            session.delete(p)
+        session.commit()
+        session.delete(a)
+        session.delete(g)
+        session.commit()
 
 
 def test_group_recruit_list():

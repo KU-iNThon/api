@@ -22,16 +22,6 @@ class GroupPostRecruitResponseDto(BaseModel):
     id: int
 
 
-class GroupPostTaskRequestDto(BaseModel):
-    title: str
-    start_date: str
-    end_date: str
-
-
-class GroupPostTaskResponseDto(BaseModel):
-    id: int
-
-
 class GroupRecruitListItemResponseDto(BaseModel):
     id: int
     title: str

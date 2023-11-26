@@ -12,6 +12,7 @@ from fastlib.service.group import GroupService
 from fastlib.service.notice import NoticeService
 from fastlib.service.participant import ParticipantService
 from fastlib.service.recruit import RecruitService
+from fastlib.service.task import TaskService
 from fastlib.service.user import UserService
 
 
@@ -51,7 +52,12 @@ def notice_service(engine):
 
 
 @pytest.fixture
-def business(Session, user_service, participant_service, group_service, recruit_service, notice_service):
+def task_service(engine):
+    return TaskService(engine)
+
+
+@pytest.fixture
+def business(Session, user_service, participant_service, group_service, recruit_service, notice_service, task_service):
     return GroupBusiness(
         session=Session,
         user_service=user_service,
@@ -59,6 +65,7 @@ def business(Session, user_service, participant_service, group_service, recruit_
         group_service=group_service,
         recruit_service=recruit_service,
         notice_service=notice_service,
+        task_service=task_service,
     )
 
 

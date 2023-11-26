@@ -5,10 +5,9 @@ from sqlalchemy.orm import sessionmaker
 
 from fastlib.business.comment import CommentBusiness
 from fastlib.business.group import GroupBusiness
-from fastlib.business.model.group import GroupParticipateResponseDto
+from fastlib.business.model.group import GroupParticipateResponseDto, GroupPostTaskRequestDto, GroupPostTaskResponseDto
 from fastlib.business.participant import ParticipantBusiness
 from fastlib.business.task import TaskBusiness
-from fastlib.entity.base import Base
 from fastlib.resource import get_engine
 from fastlib.service.comment import CommentService
 from fastlib.service.group import GroupService
@@ -33,8 +32,6 @@ from fastlib.view.model.group import (
     GroupParticipantResponseDto,
     GroupPostRecruitRequestDto,
     GroupPostRecruitResponseDto,
-    GroupPostTaskRequestDto,
-    GroupPostTaskResponseDto,
     GroupRecruitDetailResponseDto,
     GroupRecruitListItemResponseDto,
     GroupRecruitListResponseDto,
@@ -73,6 +70,7 @@ group_business = GroupBusiness(
     group_service=group_service,
     recruit_service=recruit_service,
     notice_service=notice_service,
+    task_service=task_service,
 )
 
 
@@ -84,7 +82,6 @@ def register(
     return ApiResponse.ok(GroupRegisterResponseDto(id=res.id))
 
 
-# TODO : 지금
 @router.post("/group/{room_id}/participate")
 def participate(
     room_id: int, session_id: Annotated[Union[str, None], Cookie()] = None
@@ -98,15 +95,16 @@ def post_recruit(
     group_id: int, req: GroupPostRecruitRequestDto, session_id: Annotated[Union[str, None], Cookie()] = None
 ) -> ApiResponse[GroupPostRecruitResponseDto]:
     res = group_business.create_recruit(user_id=session_id, group_id=group_id, req=req)
-    return ApiResponse.ok(GroupPostRecruitResponseDto(id=res.id))
+    return ApiResponse.ok(res)
 
 
-# TODO :
-
-
+# TODO : 지금
 @router.post("/group/{room_id}/task")
-def post_task(room_id: int, req: GroupPostTaskRequestDto) -> ApiResponse[GroupPostTaskResponseDto]:
-    return ApiResponse.ok(GroupPostTaskResponseDto(id=1))
+def post_task(
+    room_id: int, req: GroupPostTaskRequestDto, session_id: Annotated[Union[str, None], Cookie()] = None
+) -> ApiResponse[GroupPostTaskResponseDto]:
+    res = group_business.create_task(user_id=session_id, room_id=room_id, req=req)
+    return ApiResponse.ok(res)
 
 
 # TODO :

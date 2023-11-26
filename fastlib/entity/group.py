@@ -15,3 +15,4 @@ class Group(Base):
 
     recruit: Mapped["Recruit"] = relationship("Recruit", back_populates="group")
     notices = relationship("Notice", back_populates="group")
+    tasks = relationship("Task", back_populates="group")
