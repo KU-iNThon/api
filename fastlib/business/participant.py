@@ -1,9 +1,17 @@
+
 from sqlalchemy.orm import sessionmaker
 from fastapi import HTTPException
 
 from fastlib.service.participant import ParticipantService
 from fastlib.business.model.participant import GroupParticipantResponseDto
+from fastapi import HTTPException
+from sqlalchemy.orm import sessionmaker
+
 from fastlib.entity.participant import Participant
+from fastlib.service.group import GroupService
+from fastlib.service.participant import ParticipantService
+from fastlib.service.user import UserService
+from fastlib.view.model.group import GroupParticipantResponseDto
 
 
 class ParticipantBusiness:
@@ -19,4 +27,4 @@ class ParticipantBusiness:
             else:
                 session.add(entity)
                 session.commit()
-                return group_id
+        return GroupParticipantResponseDto(id=entity.id)

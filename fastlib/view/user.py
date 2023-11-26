@@ -1,5 +1,4 @@
 from fastapi import APIRouter, Response
-from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 
 from fastlib.business.model.user import UserLoginResponseDto, UserRegisterRequestDto, UserRegisterResponseDto
@@ -30,6 +29,7 @@ def login(id: str, pw: str, response: Response) -> ApiResponse[UserLoginResponse
     return ApiResponse.ok(res)
 
 
+# TODO :
 @router.get("/user/{user_id}")
 def profile(user_id: str) -> ApiResponse[UserProfileResponseDto]:
     res = UserProfileResponseDto(
