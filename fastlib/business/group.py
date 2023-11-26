@@ -4,6 +4,7 @@ from sqlalchemy.orm import sessionmaker
 from fastlib.business.model.group import (
     GroupNoticePostRequestDto,
     GroupNoticePostResponseDto,
+    GroupParticipateResponseDto,
     GroupPostRecruitRequestDto,
     GroupPostRecruitResponseDto,
     GroupRegisterRequestDto,
@@ -83,4 +84,24 @@ class GroupBusiness:
             entity = self.__notice_service.save(session=session, entity=entity)
             session.commit()
             res = GroupNoticePostResponseDto(id=entity.id)
+        return res
+
+    def participate(self, user_id: str, room_id: int) -> GroupParticipateResponseDto:
+        """
+        :return: room_id 반환
+        """
+        with self.__session() as session:
+            user = self.__user_service.find(session=session, id_=user_id)
+            group = self.__group_service.find(session=session, id_=room_id)
+            is_exist = False
+            for p in group.participants:
+                if p.user_id == user.id:
+                    is_exist = True
+                    break
+            if is_exist:
+                raise HTTPException(status_code=409, detail="이미 참여한 모임입니다.")
+            participant = Participant(user=user, group=group, role="user")
+            self.__participant_service.save(session=session, entity=participant)
+            session.commit()
+            res = GroupParticipateResponseDto(id=participant.group_id)
         return res

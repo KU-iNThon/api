@@ -5,6 +5,7 @@ from sqlalchemy.orm import sessionmaker
 
 from fastlib.business.comment import CommentBusiness
 from fastlib.business.group import GroupBusiness
+from fastlib.business.model.group import GroupParticipateResponseDto
 from fastlib.business.participant import ParticipantBusiness
 from fastlib.business.task import TaskBusiness
 from fastlib.entity.base import Base
@@ -30,7 +31,6 @@ from fastlib.view.model.group import (
     GroupNoticeResponseDto,
     GroupNotifyResponseDto,
     GroupParticipantResponseDto,
-    GroupParticipateResponseDto,
     GroupPostRecruitRequestDto,
     GroupPostRecruitResponseDto,
     GroupPostTaskRequestDto,
@@ -84,10 +84,13 @@ def register(
     return ApiResponse.ok(GroupRegisterResponseDto(id=res.id))
 
 
-# TODO :
+# TODO : 지금
 @router.post("/group/{room_id}/participate")
-def participate(room_id: int) -> ApiResponse[GroupParticipateResponseDto]:
-    return ApiResponse.ok(GroupParticipateResponseDto(id=1))
+def participate(
+    room_id: int, session_id: Annotated[Union[str, None], Cookie()] = None
+) -> ApiResponse[GroupParticipateResponseDto]:
+    res = group_business.participate(user_id=session_id, room_id=room_id)
+    return ApiResponse.ok(res)
 
 
 @router.post("/group/{group_id}/recruit")
