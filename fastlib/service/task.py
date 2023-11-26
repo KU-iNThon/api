@@ -8,7 +8,6 @@ class TaskService:
     def __init__(self, engine: Engine):
         self.__engine = engine
 
-    def save(self, session: Session, entity: Task) -> Task.id:
+    def save(self, session: Session, entity: Task) -> Task:
         session.add(entity)
-        session.commit()
-        return entity.id
+        return entity

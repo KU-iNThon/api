@@ -1,3 +1,4 @@
+from datetime import datetime
 from typing import List
 
 from pydantic import BaseModel
@@ -32,4 +33,14 @@ class GroupNoticePostResponseDto(BaseModel):
 
 
 class GroupParticipateResponseDto(BaseModel):
+    id: int
+
+
+class GroupPostTaskRequestDto(BaseModel):
+    title: str
+    start_date: datetime
+    end_date: datetime
+
+
+class GroupPostTaskResponseDto(BaseModel):
     id: int
