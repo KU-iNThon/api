@@ -10,5 +10,5 @@ class Participant(Base):
     group_id = Column(Integer, ForeignKey("groups.id"), primary_key=True)
     role = Column(VARCHAR(10))
     user = relationship("User")
-    group = relationship("Group")
+    group = relationship("Group", back_populates="participants")
     __table_args__ = (CheckConstraint("role IN ('admin', 'user')", name="role_check"),)
