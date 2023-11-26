@@ -1,5 +1,5 @@
 from pydantic import BaseModel
 
 
-class GroupParticipateResponseDto(BaseModel):
+class GroupParticipantResponseDto(BaseModel):
     id: int
