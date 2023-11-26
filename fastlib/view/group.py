@@ -50,7 +50,7 @@ participant_service = ParticipantService(engine=engine)
 group_service = GroupService(engine=engine)
 user_service = UserService(engine=engine)
 recruit_service = RecruitService(engine=engine)
-taks_service = TaskService(engine=engine)
+task_service = TaskService(engine=engine)
 comment_service = TaskService(engine=engine)
 
 group_business = GroupBusiness(
