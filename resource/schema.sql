@@ -19,6 +19,7 @@ CREATE TABLE recruits(
     description TEXT NOT NULL,
     tags TEXT NOT NULL,
     FOREIGN KEY (id) REFERENCES `groups`(id)
+    ON DELETE CASCADE ON UPDATE CASCADE
 ) engine=InnoDB;
 
 CREATE TABLE participants(
@@ -51,7 +52,8 @@ CREATE TABLE tasks(
     title VARCHAR(20) NOT NULL,
     start_Date DATETIME NOT NULL,
     end_date DATETIME NOT NULL,
-    FOREIGN KEY (group_id) REFERENCES `groups`(id),
+    FOREIGN KEY (group_id) REFERENCES `groups`(id)
+    ON DELETE CASCADE ON UPDATE CASCADE,
     UNIQUE (group_id, id)
 ) engine=InnoDB;
 
@@ -62,9 +64,12 @@ CREATE TABLE participants_tasks(
     user_id VARCHAR(20) NOT NULL,
     status VARCHAR(10) NOT NULL,
     PRIMARY KEY (task_id, group_id, user_id),
-    FOREIGN KEY (task_id) REFERENCES tasks(id),
-    FOREIGN KEY (group_id) REFERENCES `groups`(id),
-    FOREIGN KEY (user_id) REFERENCES users(id),
+    FOREIGN KEY (task_id) REFERENCES tasks(id)
+    ON DELETE CASCADE ON UPDATE CASCADE,
+    FOREIGN KEY (group_id) REFERENCES `groups`(id)
+    ON DELETE CASCADE ON UPDATE CASCADE,
+    FOREIGN KEY (user_id) REFERENCES users(id)
+    ON DELETE CASCADE ON UPDATE CASCADE,
     CHECK (status in ("PENDING", "ACCEPTED"))
 ) engine=InnoDB;
 
@@ -76,8 +81,10 @@ CREATE TABLE comments(
     task_id INTEGER,
     text TEXT NOT NULL,
     wrote_date DATETIME DEFAULT CURRENT_TIMESTAMP,
-    FOREIGN KEY (user_id) REFERENCES users(id),
-    FOREIGN KEY (group_id) REFERENCES `groups`(id),
+    FOREIGN KEY (user_id) REFERENCES users(id)
+    ON DELETE CASCADE ON UPDATE CASCADE,
+    FOREIGN KEY (group_id) REFERENCES `groups`(id)
+    ON DELETE CASCADE ON UPDATE CASCADE,
     UNIQUE (group_id, user_id, id),
     CHECK (notice_id IS NOT NULL OR task_id IS NOT NULL)
 ) engine=InnoDB;
